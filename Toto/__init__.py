@@ -6,6 +6,8 @@ This file is the entry point for the application, it get's called automatically 
 
 
 from flask import Flask
+from flask.ext.pymongo
+
 #Blueprint imports
 from Toto.api.routes import bpindex
 
