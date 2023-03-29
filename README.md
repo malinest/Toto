@@ -28,4 +28,3 @@ Once the installation finished you can run Toto by typing this on your console
 	waitress-serve --call 'flaskr:create_app'
 
 ## Configuration
-a
