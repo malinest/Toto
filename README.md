@@ -1,3 +1,5 @@
+![Toto logo](Logo1.1.svg)
+
 # Toto ![License Badge](https://img.shields.io/badge/license-GPL%203.0-blue)
 
 An open source tool written in python to create imageboards
