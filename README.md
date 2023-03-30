@@ -12,6 +12,7 @@ An open source tool written in python to create imageboards
 
 - [Installation](#installation)
 - [Configuration](#configuration)
+- [Roadmap](#roadmap)
 
 ## Installation
 
@@ -30,3 +31,5 @@ Once the installation finished you can run Toto by typing this on your console
 	waitress-serve --call 'flaskr:create_app'
 
 ## Configuration
+
+## Roadmap
