@@ -1,11 +1,9 @@
 """
-
 This file is the entry point for the application, it get's called automatically when running "flask run Toto" and contains a single method create_app().
-
 """
 
-
 from flask import Flask
+
 #Blueprint imports
 from Toto.api.routes import bpindex
 
