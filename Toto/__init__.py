@@ -5,7 +5,7 @@ This file is the entry point for the application, it get's called automatically 
 from flask import Flask
 
 #Blueprint imports
-from Toto.api.routes import bpindex
+from Toto.api.routes import bp_index, bp_dbtest
 
 #Method that get's executed by flask and 
 def create_app():
@@ -14,6 +14,7 @@ def create_app():
     """
     app = Flask(__name__)
 
-    app.register_blueprint(bpindex)
+    app.register_blueprint(bp_index)
+    app.register_blueprint(bp_dbtest)
 
     return app
