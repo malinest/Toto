@@ -10,4 +10,5 @@ else:
     raise FileNotFoundError("Can't find the config file")
 
 def getConfig(section, parameter):
-    return parser[section][parameter]
+    value = parser[section][parameter]
+    return value
