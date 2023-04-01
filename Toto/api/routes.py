@@ -1,4 +1,5 @@
 from flask import Blueprint
+
 import Toto.database.db as db
 
 #Index

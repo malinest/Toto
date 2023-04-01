@@ -1,4 +1,5 @@
 import logging
+
 import Toto.utils.globals as g
 
 logger = logging.getLogger(__name__)

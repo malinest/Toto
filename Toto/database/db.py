@@ -3,10 +3,12 @@ File that handles the database connection
 """
 
 import sys
-from Toto.utils.logger import logger
+
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+
 import Toto.utils.globals as g
+from Toto.utils.logs import logger
 
 mongo = MongoClient(g.DATABASE_URL)
 try:
