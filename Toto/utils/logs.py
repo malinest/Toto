@@ -1,3 +1,7 @@
+"""
+Handles all the logging functionality of the program.
+"""
+
 import logging
 
 import Toto.utils.globals as g

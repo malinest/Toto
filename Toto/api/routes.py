@@ -1,3 +1,7 @@
+"""
+Handles all the routes relates to the api
+"""
+
 from flask import Blueprint, request, Response
 
 import Toto.database.db as db

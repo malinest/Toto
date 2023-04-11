@@ -1,3 +1,7 @@
+"""
+Handles the loading of the config file 
+"""
+
 from configparser import ConfigParser
 from os.path import exists
 

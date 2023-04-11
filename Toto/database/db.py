@@ -1,5 +1,5 @@
 """
-File that handles the database connection
+Handles the conenction to the mongodb database
 """
 
 import sys
