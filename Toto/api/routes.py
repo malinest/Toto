@@ -1,3 +1,7 @@
+"""
+Handles all the routes relates to the api
+"""
+
 from flask import Blueprint, request, Response
 from pymongo.errors import OperationFailure
 
