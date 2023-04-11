@@ -24,7 +24,8 @@ def create_post():
         database = db.mongo["TotoDB"]
         collection = database[board]
         collection.insert_one(json)
-        return "Inserted successfully!\n"
+        logger.info("New post created on {0}", board)
+        return Response("Post created successfully", status=201)
     else:
-        logger.warning('Invalid post content type!')
-        return Response("Error 400: Bad request\n", status=400)
+        logger.warning('Invalid post content type')
+        return Response("Invalid request content type", status=400)
