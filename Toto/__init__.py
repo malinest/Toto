@@ -16,6 +16,5 @@ def create_app():
     app = Flask(__name__)
 
     app.register_blueprint(bp_index)
-    app.register_blueprint(bp_dbtest)
 
     return app
