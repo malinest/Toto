@@ -1,7 +1,7 @@
 """
 Handles all the routes relates to the api
 """
-
+from datetime import datetime
 from flask import Blueprint, request, Response
 from pymongo.errors import OperationFailure
 
@@ -26,6 +26,7 @@ def create_post():
         board = request.args.get('board')
         board = "Board_{}".format(board)
         json = request.json
+        json["date"] = datetime.now()
         database = db.mongo["TotoDB"]
         collection = database[board]
         collection.insert_one(json)
