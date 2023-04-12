@@ -9,10 +9,10 @@ import Toto.database.db as db
 from Toto.utils.logs import logger
 
 #Index
-bp_index = Blueprint("index", __name__, url_prefix="/api")
+bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
 
-@bp_index.route("/")
-def index():
+@bp_api_index.route("/")
+def api_index():
     return "<p>This is the access point of the api<p>"
 
 #Create Post
