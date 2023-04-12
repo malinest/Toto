@@ -3,8 +3,9 @@
  */
 :root {
   --bg-color: #fff;
-  --bg-secondary-color: #f3f3f6;
-  --color-primary: #14854f;
+  --bg-secondary-color: #ff88ff;
+  --color-primary: #ff11ff;
+  --color-secondary: #ffc4ff;
   --color-lightGrey: #d2d6dd;
   --color-grey: #747681;
   --color-darkGrey: #3f4144;
@@ -820,6 +821,9 @@ details.dropdown > :last-child {
 .bg-primary {
   background-color: var(--color-primary) !important;
 }
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
 .bg-light {
   background-color: var(--color-lightGrey) !important;
 }
@@ -972,7 +976,7 @@ details.dropdown > :last-child {
   cursor: pointer !important;
 }
 .is-rounded {
-  border-radius: 100%;
+  border-radius: 5px;
 }
 .clearfix {
   content: "";

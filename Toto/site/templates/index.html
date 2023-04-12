@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='chota.css') }}" type="text/css" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon" rel="icon"/>
     <title>Toto</title>
+    <style>
+        a {
+            color: black;
+        }
+        .tab {
+            padding-left: 10px;
+            margin-bottom: 2px;
+        }
+        .index-item {
+            margin: 10px auto;
+            max-width: 750px;
+        }
+        .col {
+            font-size: 1.3rem;
+        }
+    </style>
 </head>
 <body>
-    <a href="#" class="button">A button</a>
+    <header class="index-item is-horizontal-align">
+        <img src="{{ url_for('static', filename='logo.png') }}", alt="Toto logo", width="120", height="70"/>
+        <h1>Toto</h1>
+    </header>
+    <section class="index-item">
+        
+        <div class="tab bd-dark bg-primary is-full-width is-rounded">
+            <span class="text-white">Boards</span>
+        </div>
+
+        <div id="table" class="bd-dark is-full-width bg-secondary is-rounded">
+            <div class="row">
+                <div class="col text-center"><a>Something</a></div>
+                <div class="col text-center"><a>Something</a></div>
+                <div class="col text-center"><a>Something</a></div>
+                <div class="col text-center"><a>Something</a></div>
+                <div class="col text-center"><a>Something</a></div>
+            </div>
+        </div>
+    </section>
+    <footer class="index-item">
+        
+    </footer>
 </body>
 </html>
