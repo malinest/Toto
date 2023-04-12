@@ -24,6 +24,7 @@ def create_post():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         board = request.args.get('board')
+        board = "Board_{}".format(board)
         json = request.json
         database = db.mongo["TotoDB"]
         collection = database[board]

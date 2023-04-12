@@ -36,11 +36,9 @@
 
         <div id="table" class="bd-dark is-full-width bg-secondary is-rounded">
             <div class="row">
-                <div class="col text-center"><a>Something</a></div>
-                <div class="col text-center"><a>Something</a></div>
-                <div class="col text-center"><a>Something</a></div>
-                <div class="col text-center"><a>Something</a></div>
-                <div class="col text-center"><a>Something</a></div>
+                {% for collection in collections %}
+                    <div class="col-3 is-center"><a href="#">{{ collection }}</a></div>
+                {% endfor %}
             </div>
         </div>
     </section>

@@ -14,4 +14,6 @@ bp_index = Blueprint("index", __name__, template_folder="templates/")
 
 @bp_index.route("/")
 def index():
-    return render_template("index.html", result = 200)
+    raw_collections = db.mongo["TotoDB"].list_collection_names()
+    collections = [collection[6:] for collection in raw_collections if collection .startswith("Board")]
+    return render_template("index.html", collections=collections, result = 200)
