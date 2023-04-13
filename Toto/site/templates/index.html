@@ -4,18 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='chota.css') }}" type="text/css" rel="stylesheet"/>
-    <link href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon" rel="icon"/>
+    <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon"/>
     <title>Toto</title>
     <style>
-        body {
-            background: linear-gradient(180deg, rgba(255,248,255,1) 0%, rgba(255,222,255,1) 50%,  rgba(255,196,255,1) 100%);  
-            background-attachment: fixed;
-        }
         a {
             color: black;
         }
         .tab {
-            background-color: #ff88ff;
             padding-left: 10px;
             margin-bottom: 2px;
             margin-top: 10px;
@@ -28,22 +23,25 @@
             font-size: 1.3rem;
         }
         #table {
-            background-color: #ebfffa;
+            padding: 10px;
+        }
+        #table img {
+            max-height: 150px;
         }
     </style>
 </head>
-<body>
+<body class="bg-gradient">
     <header class="index-item is-horizontal-align">
-        <img src="{{ url_for('static', filename='logo.png') }}", alt="Toto logo", width="120", height="70"/>
+        <img src="{{ url_for('static', filename='logo.svg') }}", alt="Toto logo", width="120", height="70"/>
         <h1>Toto</h1>
     </header>
     <section class="index-item">
         
-        <div class="tab is-full-width is-rounded">
+        <div class="tab bg-primary is-full-width is-rounded">
             <span class="text-white">Boards</span>
         </div>
 
-        <div id="table" class="bd-grey is-full-width is-rounded">
+        <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
             <div class="row">
                 {% for collection in collections %}
                     <div class="col-3 is-center"><a href="#">{{ collection }}</a></div>
@@ -51,14 +49,51 @@
             </div>
         </div>
 
-        <div class="tab is-full-width is-rounded">
+        <div class="tab bg-primary is-full-width is-rounded">
             <span class="text-white">Trending posts</span>
         </div>
 
-        <div id="table" class="bd-grey is-full-width is-rounded">
+        <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
             <div class="row">
-                <div class="col-3">
-
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fdata.1freewallpapers.com%2Fdownload%2F3-cute-kittens.jpg&f=1&nofb=1&ipt=89f0f329e1fcf4f5fedd7c0f217a459fcc26b7904e1d05f6f242b755aa260261&ipo=images", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="http://4.bp.blogspot.com/-W-Q7_l1OoxY/UWAJSrtvn_I/AAAAAAAASVM/eMqye-hpAu4/s1600/world-s-cutest-kitten.jpg", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="http://welovecatsandkittens.com/wp-content/uploads/2016/02/likes-cutie-copy.jpg" alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="http://4.bp.blogspot.com/-dZ4VlGvH9vc/UBlJXsjGreI/AAAAAAAARvA/SKXP-99TZaM/s1600/funny-cat-pictures-009-045.jpg", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="https://i0.wp.com/i.imgur.com/pSrPrjx.jpg", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="http://www.visualjokes.com/pics/547_catsdiet.jpg", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="http://www.lovethispic.com/uploaded_images/blogs/20539-2038-8-funny-cat-pictures1.jpg", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                </div>
+                <div class="col-3 text-center">
+                    <p>Title</p>
+                    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.explicit.bing.net%2Fth%3Fid%3DOIP.Zgn5C42yvdSCKVeyJdx0pQHaIP%26pid%3DApi&f=1&ipt=c92e28fd1ed7c37a39c493c02f8c76718a90786023d1d5463bfdd405d621dd45&ipo=images", alt="TestImage">
+                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                 </div>
             </div>
         </div>

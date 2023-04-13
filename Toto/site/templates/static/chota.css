@@ -4,8 +4,9 @@
 :root {
   --bg-color: #fff;
   --bg-secondary-color: #ff88ff;
-  --color-primary: #ff11ff;
-  --color-secondary: #ffc4ff;
+  --color-primary: #ff88ff;
+  --color-secondary: rgba(255,222,255,1);
+  --color-terciary: #ebfffa;
   --color-lightGrey: #d2d6dd;
   --color-grey: #747681;
   --color-darkGrey: #3f4144;
@@ -823,6 +824,13 @@ details.dropdown > :last-child {
 }
 .bg-secondary {
   background-color: var(--color-secondary) !important;
+}
+.bg-terciary {
+  background-color: var(--color-terciary) !important;
+}
+.bg-gradient {
+  background: linear-gradient(180deg, var(--bg-color) 0%, var(--color-secondary) 25%,  var(--color-primary) 100%);  
+  background-attachment: fixed;
 }
 .bg-light {
   background-color: var(--color-lightGrey) !important;
