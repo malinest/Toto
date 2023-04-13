@@ -33,5 +33,5 @@ def create_post():
         logger.info("New post created on {0}".format(board))
         return Response("Post created successfully", status=201)
     else:
-        logger.warning('Invalid post content type')
+        logger.warning('Invalid request content type')
         return Response("Invalid request content type", status=400)

@@ -8,15 +8,17 @@
     <title>Toto</title>
     <style>
         body {
-            background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,196,255,1) 100%);  
+            background: linear-gradient(180deg, rgba(255,248,255,1) 0%, rgba(255,222,255,1) 50%,  rgba(255,196,255,1) 100%);  
             background-attachment: fixed;
         }
         a {
             color: black;
         }
         .tab {
+            background-color: #ff88ff;
             padding-left: 10px;
             margin-bottom: 2px;
+            margin-top: 10px;
         }
         .index-item {
             margin: 10px auto;
@@ -24,6 +26,9 @@
         }
         .col-3 {
             font-size: 1.3rem;
+        }
+        #table {
+            background-color: #ebfffa;
         }
     </style>
 </head>
@@ -34,7 +39,7 @@
     </header>
     <section class="index-item">
         
-        <div class="tab bg-primary is-full-width is-rounded">
+        <div class="tab is-full-width is-rounded">
             <span class="text-white">Boards</span>
         </div>
 
@@ -43,6 +48,18 @@
                 {% for collection in collections %}
                     <div class="col-3 is-center"><a href="#">{{ collection }}</a></div>
                 {% endfor %}
+            </div>
+        </div>
+
+        <div class="tab is-full-width is-rounded">
+            <span class="text-white">Trending posts</span>
+        </div>
+
+        <div id="table" class="bd-grey is-full-width is-rounded">
+            <div class="row">
+                <div class="col-3">
+
+                </div>
             </div>
         </div>
     </section>
