@@ -7,6 +7,10 @@
     <link href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon" rel="icon"/>
     <title>Toto</title>
     <style>
+        body {
+            background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,196,255,1) 100%);  
+            background-attachment: fixed;
+        }
         a {
             color: black;
         }
@@ -18,7 +22,7 @@
             margin: 10px auto;
             max-width: 750px;
         }
-        .col {
+        .col-3 {
             font-size: 1.3rem;
         }
     </style>
@@ -30,11 +34,11 @@
     </header>
     <section class="index-item">
         
-        <div class="tab bd-dark bg-primary is-full-width is-rounded">
+        <div class="tab bg-primary is-full-width is-rounded">
             <span class="text-white">Boards</span>
         </div>
 
-        <div id="table" class="bd-dark is-full-width bg-secondary is-rounded">
+        <div id="table" class="bd-grey is-full-width is-rounded">
             <div class="row">
                 {% for collection in collections %}
                     <div class="col-3 is-center"><a href="#">{{ collection }}</a></div>
