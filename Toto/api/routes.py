@@ -30,7 +30,7 @@ def create_post():
         database = db.mongo["TotoDB"]
         collection = database[board]
         collection.insert_one(json)
-        logger.info("New post created on {0}", board)
+        logger.info("New post created on {0}".format(board))
         return Response("Post created successfully", status=201)
     else:
         logger.warning('Invalid post content type')
