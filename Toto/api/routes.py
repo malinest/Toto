@@ -31,5 +31,44 @@ def create_post():
         logger.info("New post created on {0}", board)
         return Response("Post created successfully", status=201)
     else:
-        logger.warning('Invalid post content type')
+        logger.warning('Invalid request content type')
+        return Response("Invalid request content type", status=400)
+
+#Create User
+bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
+
+@bp_create_user.route("/create_user", methods = ['POST'])
+def create_user():
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        json["date"] = datetime.now()
+        database = db.mongo["TotoDB"]
+        collection = database["Users"]
+        collection.insert_one(json)
+        logger.info("New user created on {0}".format('users'))
+        return Response("User created successfully\n", status=201)
+    else:
+        logger.warning('Invalid request content type')
+        return Response("Invalid request content type", status=400)
+
+#Get User
+bp_get_user = Blueprint("get_user", __name__, url_prefix="/api")
+
+@bp_get_user.route("/get_user", methods = ['GET'])
+def get_user():
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        json = request.json
+        database = db.mongo["TotoDB"]
+        collection = database["Users"]
+        result = collection.find_one({'username': json['username'], 'pwd': json['pwd']})
+        logger.info("Request for user on {0}".format('Users'))
+        logger.debug(result)
+        if result:
+            return Response('Found!', status=201)
+        else:
+            return Response('Not Found', status=400)
+    else:
+        logger.warning('Invalid request content type')
         return Response("Invalid request content type", status=400)
