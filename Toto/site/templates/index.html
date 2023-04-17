@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='chota.css') }}" type="text/css" rel="stylesheet"/>
     <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto">
     <title>Toto</title>
     <style>
         a {
@@ -28,11 +29,18 @@
         #table img {
             max-height: 150px;
         }
+        footer {
+            padding-left: 10px;
+            font-size: 1.3rem;
+        }
+        footer a {
+            color: var(--color-primary);
+        }
     </style>
 </head>
 <body class="bg-gradient">
     <header class="index-item is-horizontal-align">
-        <img src="{{ url_for('static', filename='logo.svg') }}", alt="Toto logo", width="120", height="70"/>
+        <img id="logo" src="{{ url_for('static', filename='logo.svg') }}", alt="Toto logo", width="120", height="70"/>
         <h1>Toto</h1>
     </header>
     <section class="index-item">
@@ -98,8 +106,12 @@
             </div>
         </div>
     </section>
-    <footer class="index-item">
-        
+    <hr class="index-item is-rounded" />
+    <footer class="bg-terciary is-rounded index-item text-center">
+        <h3 class="is-marginless text-primary">Toto</h3>
+        <p>
+            <a href="https://github.com/malinest/Toto">Repository</a> • <a href="https://github.com/malinest/Toto">Source code</a> • <a href="Cock and balls">Report an issue</a>
+        </p>  
     </footer>
 </body>
 </html>
