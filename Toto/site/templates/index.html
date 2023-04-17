@@ -30,15 +30,17 @@
             max-height: 150px;
         }
         footer {
-            padding-left: 10px;
             font-size: 1.3rem;
+        }
+        footer > p {
+            margin: 10px 0;
         }
         footer a {
             color: var(--color-primary);
         }
     </style>
 </head>
-<body class="bg-gradient">
+<body>
     <header class="index-item is-horizontal-align">
         <img id="logo" src="{{ url_for('static', filename='logo.svg') }}", alt="Toto logo", width="120", height="70"/>
         <h1>Toto</h1>
@@ -51,8 +53,8 @@
 
         <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
             <div class="row">
-                {% for collection in collections %}
-                    <div class="col-3 is-center"><a href="#">{{ collection }}</a></div>
+                {% for board in boards %}
+                    <div class="col-3 is-center"><a href="{{ board.abbreviation }}">{{ board.name }}</a></div>
                 {% endfor %}
             </div>
         </div>
@@ -107,9 +109,8 @@
         </div>
     </section>
     <hr class="index-item is-rounded" />
-    <footer class="bg-terciary is-rounded index-item text-center">
-        <h3 class="is-marginless text-primary">Toto</h3>
-        <p>
+    <footer class="bg-terciary is-rounded index-item bd-primary">
+        <p class="text-center">
             <a href="https://github.com/malinest/Toto">Repository</a> • <a href="https://github.com/malinest/Toto">Source code</a> • <a href="Cock and balls">Report an issue</a>
         </p>  
     </footer>
