@@ -4,6 +4,8 @@ Handles all the routes relates to the api
 from datetime import datetime
 from flask import Blueprint, request, Response
 from pymongo.errors import OperationFailure
+from PIL import Image
+import io
 
 import Toto.database.db as db
 from Toto.utils.logs import logger
@@ -27,6 +29,11 @@ def create_post():
         board = "Board_{}".format(board)
         json = request.json
         json["date"] = datetime.now()
+
+        im = Image.open(json["image"])
+        image_bytes = io.BytesIO()
+        im.save(image_bytes, format('JPEG'))
+
         database = db.mongo["TotoDB"]
         collection = database[board]
         collection.insert_one(json)
@@ -68,9 +75,9 @@ def get_user():
         logger.info("Request for user on {0}".format('Users'))
         logger.debug(result)
         if result:
-            return Response('Found!', status=201)
+            return Response('Found!\n', status=302)
         else:
-            return Response('Not Found', status=400)
+            return Response('Not Found\n', status=404)
     else:
         logger.warning('Invalid request content type')
-        return Response("Invalid request content type", status=400)
+        return Response("Invalid request content type\n", status=400)
