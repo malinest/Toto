@@ -1,0 +1,90 @@
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon"/>
+    <title>{{ board.name }} - Toto</title>
+    <style>
+        @import url("{{ url_for('static', filename='chota.css') }}");
+
+        nav {
+            border-bottom: 2px solid var(--color-secondary);
+        }
+        section {
+            padding: 10px;
+        }
+        .post {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 10px 0px 10px;
+        }
+        .post > .post-content {
+            display: flex;
+            flex-direction: row;
+        }
+        .post .flex-container {
+            display: flex;
+            flex-direction: column;
+        }
+        .post > .post-info {
+            margin-bottom: 5px;
+        }
+        .post .minimize-button {
+            cursor: pointer;
+            height: 20px;
+            width: 20px;
+        }
+        .post .filename {
+            font-size: 1.1rem;
+            margin: 0 5px;
+        }
+        .post > .post-content > .media > img {
+            max-height: 20vw;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav bg-terciary">
+        <div class="nav-left">
+
+        </div>
+        <div class="nav-center">
+            <a href="" class="brand">
+                <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" class="hide-xs hide-sm">
+                {{ "/{0}/ {1}".format(board.abbreviation, board.name) }} 
+            </a>
+        </div>
+        <div class="nav-right">
+            <a href="">Sign up</a>
+            <a href="">Log in</a>
+        </div>
+    </nav>
+    <section>
+        <div class="post bg-terciary is-full-width is-rounded bd-primary">
+            <div class="post-info is-vertical-align">
+                <div class="minimize-button is-rounded bd-primary bg-secondary is-center">
+                    -
+                </div>
+                <div class="filename">
+                    Filename: <a href="">some-filename</a> (900x900)
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="media">
+                    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.4lg0R1W_gE8zuEzE_R1IUAHaGx%26pid%3DApi&f=1&ipt=f1b81dc99f6a2074fb646d441595354a6a176b0ed3b2faa9ec83ece5b8132b03&ipo=images" alt="A pepe">
+                </div>
+                <div class="flex-container">
+                    <div class="post-title">
+                        This is the post title
+                    </div>
+                    <div class="post-text">
+                        These are the post contents
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

@@ -17,4 +17,12 @@ bp_index = Blueprint("index", __name__, template_folder="templates/")
 def index():
     collection = db.mongo["TotoDB"]["Boards"]
     boards = DAOBoard.getAllBoards()
-    return render_template("index.html", boards=boards, result = 200)
+    return render_template("index.html", boards=boards, result=200)
+
+#Boards
+bp_board = Blueprint("board", __name__, template_folder="templates/")
+
+@bp_board.route("/<board>/")
+def board(board):
+    board = DAOBoard.getBoardByAbbreviation(board)
+    return render_template("board.html", board=board, result=200)

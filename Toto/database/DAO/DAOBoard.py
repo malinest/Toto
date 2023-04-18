@@ -18,3 +18,11 @@ def getAllBoards():
         boards.append(Board.from_json(board))
     logger.debug("Retrieved {0} boards".format(len(boards)))
     return boards
+
+def getBoardByAbbreviation(boardAbbreviation):
+    """
+    Retrieves a board by it's abbreviation
+    """
+    collection = db.mongo["TotoDB"]["Boards"]
+    result = collection.find_one({'abbreviation': boardAbbreviation})
+    return Board.from_json(result)
