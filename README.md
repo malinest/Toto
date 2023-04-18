@@ -1,4 +1,4 @@
-![Toto logo](Logo1.1.svg)
+![Toto logo](logo2.0.svg)
 
 # Toto ![License Badge](https://img.shields.io/badge/license-GPL%203.0-blue)
 
