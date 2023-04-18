@@ -17,11 +17,14 @@
         .post {
             display: flex;
             flex-direction: column;
-            padding: 10px 10px 0px 10px;
+            padding: 10px 10px 10px 10px;
+            max-height: 300px;
         }
         .post > .post-content {
             display: flex;
             flex-direction: row;
+            overflow: hidden;
+            height: 100%;
         }
         .post .flex-container {
             display: flex;
@@ -39,8 +42,19 @@
             font-size: 1.1rem;
             margin: 0 5px;
         }
+        .post .post-title {
+            font-size: 1.4rem;
+        }
+        .post .post-text {
+            width: 40vw;
+            overflow: auto;
+            font-size: 1.2rem;
+        }
+        .post > .post-content > .media {
+            margin-right: 10px;
+        }
         .post > .post-content > .media > img {
-            max-height: 20vw;
+            max-height: 200px;
             cursor: pointer;
         }
     </style>
@@ -77,10 +91,12 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        This is the post title
+                        <span style="color: blue;">This_is_the_post_title</span> <span style="color: green;">This_is_the_username</span> 01/01/2022(00:00:00) <a>No.000000</a>
                     </div>
                     <div class="post-text">
-                        These are the post contents
+                        Impedit optio autem totam esse neque minima eveniet. Dolores dicta provident alias ipsum quas placeat laudantium eaque! Molestiae qui perferendis inventore laboriosam officia et minus quidem sequi explicabo! Maiores, ab.
+                        Unde tenetur praesentium porro perferendis est, vitae delectus, ullam quaerat dolore facilis asperiores rerum nemo eaque impedit aspernatur. Accusamus, est accusantium. Atque dignissimos eaque unde, recusandae natus blanditiis quas eius.
+                        Expedita exercitationem ducimus sapiente quit, quae in, corrupti sequi quia fuga dolorum maiores aliquam. Pariatur optio adipisci facilis sed veniam ad molestiae, nam neque voluptate dolores eaque, blanditiis voluptatum.
                     </div>
                 </div>
             </div>
