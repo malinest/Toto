@@ -2,7 +2,6 @@
 DAO for the 'Boards' collection
 """
 
-import json
 import Toto.database.db as db
 from Toto.models.board import Board
 from Toto.utils.logs import logger
