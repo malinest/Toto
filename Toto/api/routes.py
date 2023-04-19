@@ -3,14 +3,13 @@ Handles all the routes relates to the api
 """
 from datetime import datetime
 from flask import Blueprint, request, Response
-from flask_bcrypt import Bcrypt
 from pymongo.errors import OperationFailure
+from bson import Binary
 from PIL import Image
-import io
+from io import BytesIO
 
 import Toto.database.db as db
 from Toto.utils.logs import logger
-bcrypt = Bcrypt()
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -53,12 +52,11 @@ def create_user():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         json = request.json
-        json["pwd"] = bcrypt.generate_password_hash(json["pwd"]).decode('utf-8')
-        json["date"] = datetime.now()
-        database = db.mongo["TotoDB"]
-        collection = database["Users"]
+        collection = db.mongo["TotoDB"]["Users"]
+        json["creation_date"] = datetime.now()
+        json["profile_picture"] = Binary(request.files["profile_picture"].read())
         collection.insert_one(json)
-        logger.info("New user created on {0}".format('Users'))
+        logger.info("New user creater")
         return Response("User created successfully\n", status=201)
     else:
         logger.warning('Invalid request content type')
@@ -69,24 +67,25 @@ bp_get_user = Blueprint("get_user", __name__, url_prefix="/api")
 
 @bp_get_user.route("/get_user", methods = ['GET'])
 def get_user():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        json = request.json
-        database = db.mongo["TotoDB"]
-        collection = database["Users"]
-        result = collection.find_one({'username': json['username']})
-        logger.info("Request for user on {0}".format('Users'))
-        logger.debug(result)
-        if result:
-            if bcrypt.check_password_hash(result['pwd'], json['pwd']):
-                logger.debug(msg)('Log in successful')
-                return Response('Log in successful!\n', status=302)
-            else:
-                logger.debug(msg)('Password not matching')
-                return Response("Username and password doesn't match\n", status=404)
-        else:
-            logger.info('User not found')
-            return Response("User not found\n", status=404)
-    else:
-        logger.warning('Invalid request content type')
-        return Response("Invalid request content type\n", status=400)
+#    content_type = request.headers.get('Content-Type')
+#    if (content_type == 'application/json'):
+#        json = request.json
+#        database = db.mongo["TotoDB"]
+#        collection = database["Users"]
+#        result = collection.find_one({'username': json['username']})
+#        logger.info("Request for user on {0}".format('Users'))
+#        logger.debug(result)
+#        if result:
+#            if bcrypt.check_password_hash(result['pwd'], json['pwd']):
+#                logger.debug(msg)('Log in successful')
+#                return Response('Log in successful!\n', status=302)
+#            else:
+#                logger.debug(msg)('Password not matching')
+#                return Response("Username and password doesn't match\n", status=404)
+#        else:
+#            logger.info('User not found')
+#            return Response("User not found\n", status=404)
+#    else:
+#        logger.warning('Invalid request content type')
+#        return Response("Invalid request content type\n", status=400)
+    return None
