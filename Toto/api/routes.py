@@ -3,10 +3,14 @@ Handles all the routes relates to the api
 """
 from datetime import datetime
 from flask import Blueprint, request, Response
+from flask_bcrypt import Bcrypt
 from pymongo.errors import OperationFailure
+from PIL import Image
+import io
 
 import Toto.database.db as db
 from Toto.utils.logs import logger
+bcrypt = Bcrypt()
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -27,6 +31,11 @@ def create_post():
         board = "Board_{}".format(board)
         json = request.json
         json["date"] = datetime.now()
+
+        im = Image.open(json["image"])
+        image_bytes = io.BytesIO()
+        im.save(image_bytes, format('JPEG'))
+
         database = db.mongo["TotoDB"]
         collection = database[board]
         collection.insert_one(json)
@@ -44,11 +53,12 @@ def create_user():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         json = request.json
+        json["pwd"] = bcrypt.generate_password_hash(json["pwd"]).decode('utf-8')
         json["date"] = datetime.now()
         database = db.mongo["TotoDB"]
         collection = database["Users"]
         collection.insert_one(json)
-        logger.info("New user created on {0}".format('users'))
+        logger.info("New user created on {0}".format('Users'))
         return Response("User created successfully\n", status=201)
     else:
         logger.warning('Invalid request content type')
@@ -64,13 +74,19 @@ def get_user():
         json = request.json
         database = db.mongo["TotoDB"]
         collection = database["Users"]
-        result = collection.find_one({'username': json['username'], 'pwd': json['pwd']})
+        result = collection.find_one({'username': json['username']})
         logger.info("Request for user on {0}".format('Users'))
         logger.debug(result)
         if result:
-            return Response('Found!', status=201)
+            if bcrypt.check_password_hash(result['pwd'], json['pwd']):
+                logger.debug(msg)('Log in successful')
+                return Response('Log in successful!\n', status=302)
+            else:
+                logger.debug(msg)('Password not matching')
+                return Response("Username and password doesn't match\n", status=404)
         else:
-            return Response('Not Found', status=400)
+            logger.info('User not found')
+            return Response("User not found\n", status=404)
     else:
         logger.warning('Invalid request content type')
-        return Response("Invalid request content type", status=400)
+        return Response("Invalid request content type\n", status=400)
