@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-import hashlibc
 from io import BytesIO
 
 @dataclass
@@ -8,8 +7,8 @@ class User():
     username: str
     email: str
     password: str
-    profile_picture: BytesIO
     birthday: datetime
+    profile_picture: BytesIO
     creation_date: datetime
 
     @staticmethod

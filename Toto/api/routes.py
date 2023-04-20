@@ -2,14 +2,14 @@
 Handles all the routes relates to the api
 """
 from datetime import datetime
-from flask import Blueprint, request, Response
-from pymongo.errors import OperationFailure
-from bson import Binary
-from PIL import Image
 from io import BytesIO
+
+from flask import Blueprint, Response, jsonify, request
+from pymongo.errors import OperationFailure
 
 import Toto.database.db as db
 from Toto.utils.logs import logger
+from Toto.models.user import User
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -49,18 +49,10 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 
 @bp_create_user.route("/create_user", methods = ['POST'])
 def create_user():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        json = request.json
-        collection = db.mongo["TotoDB"]["Users"]
-        json["creation_date"] = datetime.now()
-        json["profile_picture"] = Binary(request.files["profile_picture"].read())
-        collection.insert_one(json)
-        logger.info("New user creater")
-        return Response("User created successfully\n", status=201)
-    else:
-        logger.warning('Invalid request content type')
-        return Response("Invalid request content type", status=400)
+    collection = db.mongo["TotoDB"]["Users"]
+    user = User(request.form["username"], request.form["email"], request.form["password"], request.form["birthday"], BytesIO(request.files["profile_picture"].read()), datetime.now())
+    logger.info("New user creater")
+    return Response(str(user), status=201)
 
 #Get User
 bp_get_user = Blueprint("get_user", __name__, url_prefix="/api")
