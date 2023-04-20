@@ -1,18 +1,18 @@
 """
 Handles all the routes relates to the api
 """
+import base64
 from datetime import datetime
-from io import BytesIO
 
 from flask import Blueprint, Response, jsonify, request
-from pymongo.errors import OperationFailure, DuplicateKeyError
+from pymongo.errors import DuplicateKeyError, OperationFailure
 
-import Toto.database.db as db
-from Toto.utils.logs import logger
-from Toto.models.user import User
-from Toto.models.post import Post
-import Toto.database.DAO.DAOUser as DAOUser
 import Toto.database.DAO.DAOCounter as DAOCounter
+import Toto.database.DAO.DAOUser as DAOUser
+import Toto.database.db as db
+from Toto.models.post import Post
+from Toto.models.user import User
+from Toto.utils.logs import logger
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -29,7 +29,7 @@ def create_post():
     board = request.args.get('board')
     collection = db.mongo["TotoDB"][board]
     data = request.form
-    post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), BytesIO(request.files["media"].read()), request.files["media"].filename, data["content"], [])
+    post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(request.files["media"].read()), request.files["media"].filename, data["content"], [])
     collection.insert_one(post.to_dict())
     logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
     return Response("Post created successfully", status=201)

@@ -8,6 +8,7 @@ from pymongo.errors import OperationFailure
 
 import Toto.database.db as db
 import Toto.database.DAO.DAOBoard as DAOBoard
+import Toto.database.DAO.DAOPosts as DAOPosts
 from Toto.utils.logs import logger
 
 #Index
@@ -24,5 +25,6 @@ bp_board = Blueprint("board", __name__, template_folder="templates/")
 
 @bp_board.route("/<board>/", methods=['GET'])
 def board(board):
-    board = DAOBoard.getBoardByAbbreviation(board)
-    return render_template("board.html", board=board, result=200)
+    full_board = DAOBoard.getBoardByAbbreviation(board)
+    posts = DAOPosts.getAllPostsFromBoard(full_board.collection_name)
+    return render_template("board.html", board=full_board, posts=posts, result=200)

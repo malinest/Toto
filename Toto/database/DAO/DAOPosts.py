@@ -2,9 +2,9 @@
 DAO for the posts collections
 """
 
-import json
 import Toto.database.db as db
 from Toto.utils.logs import logger
+from Toto.models.post import Post
 
 def getAllPostsFromBoard(board):
     """

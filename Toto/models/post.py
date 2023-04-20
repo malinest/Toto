@@ -4,7 +4,6 @@ from io import BytesIO
 
 from Toto.models.comment import Comment
 
-
 @dataclass
 class Post():
     """
@@ -14,14 +13,14 @@ class Post():
     title: str
     username: str
     date: datetime
-    media: str
+    media: bytes
     filename: str
     content: str
     comments: list[Comment]
 
     def to_dict(self):
-        return {"_id": self.id, "title": self.title, "username": self.username, "date": self.date, "media": self.media.getvalue(), "filename": self.filename, "content": self.content, "comments": self.comments}
+        return {"_id": self.id, "title": self.title, "username": self.username, "date": self.date, "media": self.media, "filename": self.filename, "content": self.content, "comments": self.comments}
 
     @staticmethod
     def from_json(json_dict):
-        return Post(json_dict["id"], json_dict["title"], json_dict["username"], json_dict["date"], json_dict["media"], json_dict["filename"], json_dict["content"], json_dict["comments"])
+        return Post(json_dict["_id"], json_dict["title"], json_dict["username"], json_dict["date"], json_dict["media"], json_dict["filename"], json_dict["content"], json_dict["comments"])
