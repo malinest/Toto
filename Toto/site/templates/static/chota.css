@@ -3,11 +3,11 @@
  */
  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500&display=swap');
 :root {
-  --bg-color: #fff;
+  --bg-color: #fffcf6;
   --bg-secondary-color: #ff88ff;
-  --color-primary: #ff88ff;
-  --color-secondary: rgba(255,222,255,1);
-  --color-terciary: #ebfffa;
+  --color-primary: #9e9583;
+  --color-secondary: #ded1b8;
+  --color-terciary: #fff3dd;
   --color-lightGrey: #d2d6dd;
   --color-grey: #747681;
   --color-darkGrey: #3f4144;

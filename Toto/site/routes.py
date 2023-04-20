@@ -7,13 +7,24 @@ from flask import Blueprint, render_template, url_for
 from pymongo.errors import OperationFailure
 
 import Toto.database.db as db
+import Toto.database.DAO.DAOBoard as DAOBoard
+import Toto.database.DAO.DAOPosts as DAOPosts
 from Toto.utils.logs import logger
 
 #Index
 bp_index = Blueprint("index", __name__, template_folder="templates/")
 
-@bp_index.route("/")
+@bp_index.route("/", methods=['GET'])
 def index():
-    raw_collections = db.mongo["TotoDB"].list_collection_names()
-    collections = [collection[6:] for collection in raw_collections if collection .startswith("Board")]
-    return render_template("index.html", collections=collections, result = 200)
+    collection = db.mongo["TotoDB"]["Boards"]
+    boards = DAOBoard.getAllBoards()
+    return render_template("index.html", boards=boards, result=200)
+
+#Boards
+bp_board = Blueprint("board", __name__, template_folder="templates/")
+
+@bp_board.route("/<board>/", methods=['GET'])
+def board(board):
+    full_board = DAOBoard.getBoardByAbbreviation(board)
+    posts = DAOPosts.getAllPostsFromBoard(full_board.collection_name)
+    return render_template("board.html", board=full_board, posts=posts, result=200)
