@@ -10,6 +10,7 @@ import Toto.database.db as db
 import Toto.database.DAO.DAOBoard as DAOBoard
 import Toto.database.DAO.DAOPosts as DAOPosts
 from Toto.utils.logs import logger
+import Toto.utils.globals as g
 
 #Index
 bp_index = Blueprint("index", __name__, template_folder="templates/")

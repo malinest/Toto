@@ -5,6 +5,7 @@ DAO for the 'Boards' collection
 import Toto.database.db as db
 from Toto.models.board import Board
 from Toto.utils.logs import logger
+import Toto.utils.globals as g
 
 def getAllBoards():
     """

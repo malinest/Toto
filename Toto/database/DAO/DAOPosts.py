@@ -5,6 +5,7 @@ DAO for the posts collections
 import Toto.database.db as db
 from Toto.utils.logs import logger
 from Toto.models.post import Post
+import Toto.utils.globals as g
 
 def getAllPostsFromBoard(board):
     """

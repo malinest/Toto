@@ -1,5 +1,6 @@
 import Toto.database.db as db
 from Toto.models.counter import Counter
+import Toto.utils.globals as g
 
 def getBoardSequence(board):
     """

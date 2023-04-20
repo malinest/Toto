@@ -6,6 +6,7 @@ import Toto.utils.config_loader as config_loader
 
 #Database variables
 DATABASE_URL = config_loader.getConfig("Database", "URL")
+DATABASE_NAME = config_loader.getConfig("Database", "DATABASE_NAME")
 
 #Logging
 LOG_LEVEL = config_loader.getConfig("Logging", "LOG_LEVEL")

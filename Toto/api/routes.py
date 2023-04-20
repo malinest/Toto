@@ -13,6 +13,7 @@ import Toto.database.db as db
 from Toto.models.post import Post
 from Toto.models.user import User
 from Toto.utils.logs import logger
+import Toto.utils.globals as g
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -27,7 +28,7 @@ bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 @bp_create_post.route("/create_post", methods = ['POST'])
 def create_post():
     board = request.args.get('board')
-    collection = db.mongo["TotoDB"][board]
+    collection = db.mongo[g.DATABASE_NAME][board]
     data = request.form
     post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(request.files["media"].read()), request.files["media"].filename, data["content"], [])
     collection.insert_one(post.to_dict())
@@ -39,7 +40,7 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 
 @bp_create_user.route("/create_user", methods = ['POST'])
 def create_user():
-    collection = db.mongo["TotoDB"]["Users"]
+    collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = User(request.form["username"], request.form["email"], request.form["password"], request.form["birthday"], BytesIO(request.files["profile_picture"].read()), datetime.now())
     try:
         collection.insert_one(user.to_dict())
@@ -54,7 +55,7 @@ bp_login = Blueprint("login", __name__, url_prefix="/api")
 
 @bp_login.route("/login", methods = ['POST'])
 def login():
-    collection = db.mongo["TotoDB"]["Users"]
+    collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
     if user.password == request.form["password"]:
         return Response("Logged in successfully", status=200)
