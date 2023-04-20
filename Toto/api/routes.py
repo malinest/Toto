@@ -51,8 +51,9 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 def create_user():
     collection = db.mongo["TotoDB"]["Users"]
     user = User(request.form["username"], request.form["email"], request.form["password"], request.form["birthday"], BytesIO(request.files["profile_picture"].read()), datetime.now())
-    logger.info("New user creater")
-    return Response(str(user), status=201)
+    collection.insert_one(user.to_dict())
+    logger.info("New user {0} created".format(user.username))
+    return Response("User {0} created successfully".format(user.username), status=201)
 
 #Get User
 bp_get_user = Blueprint("get_user", __name__, url_prefix="/api")
