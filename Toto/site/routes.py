@@ -17,7 +17,7 @@ bp_index = Blueprint("index", __name__, template_folder="templates/")
 
 @bp_index.route("/", methods=['GET'])
 def index():
-    collection = db.mongo["TotoDB"]["Boards"]
+    collection = db.mongo[g.DATABASE_NAME]["Boards"]
     boards = DAOBoard.getAllBoards()
     return render_template("index.html", boards=boards, result=200)
 

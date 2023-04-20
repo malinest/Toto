@@ -12,7 +12,7 @@ def getAllBoards():
     Retrieves all the boards from the database and returns a list of them
     """
     boards = []
-    collection = db.mongo["TotoDB"]["Boards"]
+    collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find({})
     for board in result:
         boards.append(Board.from_json(board))
@@ -23,6 +23,6 @@ def getBoardByAbbreviation(boardAbbreviation):
     """
     Retrieves a board by it's abbreviation
     """
-    collection = db.mongo["TotoDB"]["Boards"]
+    collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find_one({'abbreviation': boardAbbreviation})
     return Board.from_json(result)

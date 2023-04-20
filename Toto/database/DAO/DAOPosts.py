@@ -13,7 +13,7 @@ def getAllPostsFromBoard(board):
     Example: Board_Technology
     """
     posts = []
-    collection = db.mongo["TotoDB"][board]
+    collection = db.mongo[g.DATABASE_NAME][board]
     result = collection.find({})
     for post in result:
         posts.append(Post.from_json(post))

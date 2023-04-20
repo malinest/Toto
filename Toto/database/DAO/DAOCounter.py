@@ -7,7 +7,7 @@ def getBoardSequence(board):
     Returns the current sequience of a board's counter and increases it by 1
     Input example: Board_Technology
     """
-    collection = db.mongo["TotoDB"]["Counters"]
+    collection = db.mongo[g.DATABASE_NAME]["Counters"]
     increaseBoardCounter(board)
     result = collection.find_one({"collection": board})
     counter = Counter.from_json(result)
@@ -18,5 +18,5 @@ def increaseBoardCounter(board):
     Increases a board's counter by 1
     Input example: Board_Technology
     """
-    collection = db.mongo["TotoDB"]["Counters"]
+    collection = db.mongo[g.DATABASE_NAME]["Counters"]
     collection.update_one({"collection": board}, {"$inc": {"sequence": 1}})
