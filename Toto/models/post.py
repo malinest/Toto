@@ -1,5 +1,9 @@
 from dataclasses import dataclass
 from datetime import datetime
+from io import BytesIO
+
+from Toto.models.comment import Comment
+
 
 @dataclass
 class Post():
@@ -14,6 +18,9 @@ class Post():
     filename: str
     content: str
     comments: list[Comment]
+
+    def to_dict(self):
+        return {"_id": self.id, "title": self.title, "username": self.username, "date": self.date, "media": self.media.getvalue(), "filename": self.filename, "content": self.content, "comments": self.comments}
 
     @staticmethod
     def from_json(json_dict):

@@ -16,5 +16,5 @@ def getAllUsers():
 
 def getUserByUsername(username):
     collection = db.mongo["TotoDB"]["Users"]
-    result = collection.find_one({"username": nickname})
+    result = collection.find_one({"username": username})
     return User.from_json(result)

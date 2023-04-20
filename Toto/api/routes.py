@@ -10,6 +10,9 @@ from pymongo.errors import OperationFailure, DuplicateKeyError
 import Toto.database.db as db
 from Toto.utils.logs import logger
 from Toto.models.user import User
+from Toto.models.post import Post
+import Toto.database.DAO.DAOUser as DAOUser
+import Toto.database.DAO.DAOCounter as DAOCounter
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -19,30 +22,17 @@ def api_index():
     return "<p>This is the access point of the api<p>"
 
 #Create Post
-#TODO: Check if the collection's name (board)
 bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 
 @bp_create_post.route("/create_post", methods = ['POST'])
 def create_post():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        board = request.args.get('board')
-        board = "Board_{}".format(board)
-        json = request.json
-        json["date"] = datetime.now()
-
-        im = Image.open(json["image"])
-        image_bytes = io.BytesIO()
-        im.save(image_bytes, format('JPEG'))
-
-        database = db.mongo["TotoDB"]
-        collection = database[board]
-        collection.insert_one(json)
-        logger.info("New post created on {0}".format(board))
-        return Response("Post created successfully", status=201)
-    else:
-        logger.warning('Invalid request content type')
-        return Response("Invalid request content type", status=400)
+    board = request.args.get('board')
+    collection = db.mongo["TotoDB"][board]
+    data = request.form
+    post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), BytesIO(request.files["media"].read()), request.files["media"].filename, data["content"], [])
+    collection.insert_one(post.to_dict())
+    logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
+    return Response("Post created successfully", status=201)
 
 #Create User
 bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
@@ -59,30 +49,14 @@ def create_user():
         return Response("Username {0} already exists".format(user.username), status=400)
 
 
-#Get User
-bp_get_user = Blueprint("get_user", __name__, url_prefix="/api")
+#Login
+bp_login = Blueprint("login", __name__, url_prefix="/api")
 
-@bp_get_user.route("/get_user", methods = ['GET'])
-def get_user():
-#    content_type = request.headers.get('Content-Type')
-#    if (content_type == 'application/json'):
-#        json = request.json
-#        database = db.mongo["TotoDB"]
-#        collection = database["Users"]
-#        result = collection.find_one({'username': json['username']})
-#        logger.info("Request for user on {0}".format('Users'))
-#        logger.debug(result)
-#        if result:
-#            if bcrypt.check_password_hash(result['pwd'], json['pwd']):
-#                logger.debug(msg)('Log in successful')
-#                return Response('Log in successful!\n', status=302)
-#            else:
-#                logger.debug(msg)('Password not matching')
-#                return Response("Username and password doesn't match\n", status=404)
-#        else:
-#            logger.info('User not found')
-#            return Response("User not found\n", status=404)
-#    else:
-#        logger.warning('Invalid request content type')
-#        return Response("Invalid request content type\n", status=400)
-    return None
+@bp_login.route("/login", methods = ['POST'])
+def login():
+    collection = db.mongo["TotoDB"]["Users"]
+    user = DAOUser.getUserByUsername(request.form["username"])
+    if user.password == request.form["password"]:
+        return Response("Logged in successfully", status=200)
+    else:
+        return Response("Loggin incorrect", status=401)
