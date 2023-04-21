@@ -1,3 +1,4 @@
 Flask
 pymongo
 Faker
+requests
