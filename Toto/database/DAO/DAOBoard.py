@@ -26,3 +26,12 @@ def getBoardByAbbreviation(boardAbbreviation):
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find_one({'abbreviation': boardAbbreviation})
     return Board.from_json(result)
+
+def checkIfBoardExists(board_collection_name):
+    """
+    Checks if a board exists and returns a boolean depending on the result
+    Input example: "Board_Technology"
+    """
+    collection = db.mongo[g.DATABASE_NAME]["Boards"]
+    result = collection.find_one({"collection_name": board_collection_name})
+    return True if result else False

@@ -9,6 +9,7 @@ from pymongo.errors import DuplicateKeyError, OperationFailure
 
 import Toto.database.DAO.DAOCounter as DAOCounter
 import Toto.database.DAO.DAOUser as DAOUser
+import Toto.database.DAO.DAOBoard as DAOBoard
 import Toto.database.db as db
 from Toto.models.post import Post
 from Toto.models.user import User
@@ -28,12 +29,15 @@ bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 @bp_create_post.route("/create_post", methods = ['POST'])
 def create_post():
     board = request.args.get('board')
-    collection = db.mongo[g.DATABASE_NAME][board]
-    data = request.form
-    post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(request.files["media"].read()), request.files["media"].filename, data["content"], [])
-    collection.insert_one(post.to_dict())
-    logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
-    return Response("Post created successfully", status=201)
+    if DAOBoard.checkIfBoardExists(board):
+        collection = db.mongo[g.DATABASE_NAME][board]
+        data = request.form
+        post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(request.files["media"].read()), request.files["media"].filename, data["content"], [])
+        collection.insert_one(post.to_dict())
+        logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
+        return Response("Post created successfully", status=201)
+    else:
+        return Response("Board not found", status=404)
 
 #Create User
 bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
