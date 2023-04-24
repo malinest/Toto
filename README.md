@@ -31,11 +31,3 @@ Once the installation finished you can run Toto by typing this on your console
 	waitress-serve --call 'flaskr:create_app'
 
 ## Configuration
-
-## Roadmap
-- [ ] Make Local Database for Testing 
-- [ ] Successfully create de Web Server
-- [ ] Build the api requests
-- [ ] Build the Flutter App
-- [ ] Improve the web
-- [ ] Create Log Framework
