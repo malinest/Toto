@@ -2,6 +2,9 @@ from dataclasses import dataclass
 
 @dataclass
 class Counter():
+    """
+    Class for the counters
+    """
     collection: str
     sequence: int
 

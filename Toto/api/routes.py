@@ -1,5 +1,5 @@
 """
-Handles all the routes relates to the api
+Handles all the routes related to the api
 """
 import base64
 import os

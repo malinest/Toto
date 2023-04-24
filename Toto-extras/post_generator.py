@@ -1,3 +1,9 @@
+"""
+Script that generates a specified number of posts on a board
+The script only takes 2 arguments:
+    1. board_name: This is the name of the collection that contains the board (ex: Board_Technology)
+    2. posts_number: This is the number of posts that will be generated on said board
+"""
 import sys
 import io
 import requests

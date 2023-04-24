@@ -3,9 +3,9 @@ DAO for the 'Boards' collection
 """
 
 import Toto.database.db as db
+import Toto.utils.globals as g
 from Toto.models.board import Board
 from Toto.utils.logs import logger
-import Toto.utils.globals as g
 
 def getAllBoards():
     """
@@ -25,7 +25,10 @@ def getBoardByAbbreviation(boardAbbreviation):
     """
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find_one({'abbreviation': boardAbbreviation})
-    return Board.from_json(result)
+    if result:
+        return Board.from_json(result)
+    else:
+        return None
 
 def checkIfBoardExists(board_collection_name):
     """

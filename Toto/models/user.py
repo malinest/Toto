@@ -4,6 +4,9 @@ from io import BytesIO
 
 @dataclass
 class User():
+    """
+    Class for the posts
+    """
     username: str
     email: str
     password: str
