@@ -19,7 +19,8 @@ bp_index = Blueprint("index", __name__, template_folder="templates/")
 def index():
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
     boards = DAOBoard.getAllBoards()
-    return render_template("index.html", boards=boards, result=200)
+    posts = DAOPosts.getRandomPosts()
+    return render_template("index.html", boards=boards, posts=posts, result=200)
 
 #Boards
 bp_board = Blueprint("board", __name__, template_folder="templates/")

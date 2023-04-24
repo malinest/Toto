@@ -21,6 +21,8 @@
         }
         .col-3 {
             font-size: 1.3rem;
+            max-height: 400px;
+            overflow: hidden;
         }
         #table {
             padding: 10px;
@@ -64,46 +66,13 @@
 
         <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
             <div class="row">
+                {% for post in posts %}
                 <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fdata.1freewallpapers.com%2Fdownload%2F3-cute-kittens.jpg&f=1&nofb=1&ipt=89f0f329e1fcf4f5fedd7c0f217a459fcc26b7904e1d05f6f242b755aa260261&ipo=images", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    <p>{{ post.title }}</p>
+                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media">
+                    <p>{{ post.content }}</p>
                 </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="http://4.bp.blogspot.com/-W-Q7_l1OoxY/UWAJSrtvn_I/AAAAAAAASVM/eMqye-hpAu4/s1600/world-s-cutest-kitten.jpg", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="http://welovecatsandkittens.com/wp-content/uploads/2016/02/likes-cutie-copy.jpg" alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="http://4.bp.blogspot.com/-dZ4VlGvH9vc/UBlJXsjGreI/AAAAAAAARvA/SKXP-99TZaM/s1600/funny-cat-pictures-009-045.jpg", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="https://i0.wp.com/i.imgur.com/pSrPrjx.jpg", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="http://www.visualjokes.com/pics/547_catsdiet.jpg", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="http://www.lovethispic.com/uploaded_images/blogs/20539-2038-8-funny-cat-pictures1.jpg", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-                <div class="col-3 text-center">
-                    <p>Title</p>
-                    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.explicit.bing.net%2Fth%3Fid%3DOIP.Zgn5C42yvdSCKVeyJdx0pQHaIP%26pid%3DApi&f=1&ipt=c92e28fd1ed7c37a39c493c02f8c76718a90786023d1d5463bfdd405d621dd45&ipo=images", alt="TestImage">
-                    <p>Post contents: Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </section>
@@ -111,7 +80,7 @@
     <footer class="bg-terciary is-rounded index-item bd-primary">
         <p class="text-center">
             <a href="https://github.com/malinest/Toto">Repository</a> • <a href="https://github.com/malinest/Toto">Source code</a> • <a href="https://github.com/malinest/Toto/issues">Report an issue</a>
-        </p>  
+        </p>
     </footer>
 </body>
 </html>

@@ -36,13 +36,13 @@ def create_post():
         collection = db.mongo[g.DATABASE_NAME][board]
         data = request.form
         media = request.files["media"]
-        if os.path.splitext(media.filename)[1] in ALLOWED_EXTENSIONS:
-            post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
-            collection.insert_one(post.to_dict())
-            logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
-            return Response("Post created successfully", status=201)
-        else:
-            return Response("Invalid file extension", status=415)
+        #if os.path.splitext(media.filename)[1] in ALLOWED_EXTENSIONS:
+        post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
+        collection.insert_one(post.to_dict())
+        logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
+        return Response("Post created successfully", status=201)
+        #else:
+        #    return Response("Invalid file extension", status=415)
     else:
         return Response("Board not found", status=404)
 
