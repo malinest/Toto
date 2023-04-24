@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon"/>
     <title>{{ board.name }} - Toto</title>
-    <style>
+    <style type="text/css">
         @import url("{{ url_for('static', filename='chota.css') }}");
 
         nav {
@@ -59,9 +59,42 @@
             max-width: 400px;
             cursor: pointer;
         }
+        #imageViewer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto auto;
+            width: 100vw;
+            height: 100vh;
+            visibility: hidden;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
     </style>
+    <script type="text/javascript">
+        function imageEventListeners() {
+            const images = document.getElementsByClassName("Image");
+            const imageViewer = document.getElementById("imageViewer");
+            const imageViewer_image = document.getElementById("imageViewer_image");
+            for(let image of images) {
+                image.addEventListener("click", () => {
+                    imageViewer.style.visibility = "visible";
+                    imageViewer_image.src = image.src;
+                })
+            }
+        }
+
+        function closeImage() {
+            const imageViewer = document.getElementById("imageViewer");
+            imageViewer.style.visibility = "hidden";
+        }
+    </script>
 </head>
-<body>
+<body onload="imageEventListeners()" >
     <nav class="nav bg-terciary">
         <div class="nav-left">
 
@@ -90,7 +123,7 @@
             </div>
             <div class="post-content">
                 <div class="media">
-                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media">
+                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media" class="Image">
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
@@ -104,5 +137,8 @@
         </div>
         {% endfor %}
     </section>
+    <div id="imageViewer" onclick="closeImage()">
+        <img src="" alt="Image" id="imageViewer_image">
+    </div>
 </body>
 </html>
