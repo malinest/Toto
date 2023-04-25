@@ -5,7 +5,7 @@ import base64
 import os
 from datetime import datetime
 
-from flask import Blueprint, Response, jsonify, request
+from flask import Blueprint, Response, jsonify, request, redirect, url_for
 from pymongo.errors import DuplicateKeyError, OperationFailure
 
 import Toto.database.DAO.DAOCounter as DAOCounter
@@ -33,14 +33,15 @@ bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 def create_post():
     board = request.args.get('board')
     if DAOBoard.checkIfBoardExists(board):
-        collection = db.mongo[g.DATABASE_NAME][board]
+        board = DAOBoard.getBoardByCollectionName(board)
+        collection = db.mongo[g.DATABASE_NAME][board.collection_name]
         data = request.form
         media = request.files["media"]
         #if os.path.splitext(media.filename)[1] in ALLOWED_EXTENSIONS:
-        post = Post(DAOCounter.getBoardSequence(board), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
+        post = Post(DAOCounter.getBoardSequence(board.collection_name), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
         collection.insert_one(post.to_dict())
-        logger.info("New post created on {0} with id {1} by {2}".format(board, post.id, post.username))
-        return Response("Post created successfully", status=201)
+        logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
+        return redirect("/{0}/".format(board.abbreviation), code=201)
         #else:
         #    return Response("Invalid file extension", status=415)
     else:
