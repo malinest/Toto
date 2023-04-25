@@ -29,7 +29,7 @@
             max-height: 300px;
         }
 
-        .post>.post-content {
+        .post > .post-content {
             display: flex;
             flex-direction: row;
             overflow: hidden;
@@ -41,7 +41,7 @@
             flex-direction: column;
         }
 
-        .post>.post-info {
+        .post > .post-info {
             margin-bottom: 5px;
         }
 
@@ -64,13 +64,14 @@
             width: 40vw;
             overflow: auto;
             font-size: 1.2rem;
+            white-space: pre-line;
         }
 
-        .post>.post-content>.media {
+        .post > .post-content > .media {
             margin-right: 10px;
         }
 
-        .post>.post-content>.media>img {
+        .post > .post-content > .media > img {
             max-height: 200px;
             max-width: 400px;
             cursor: pointer;
@@ -176,7 +177,7 @@
                     -
                 </div>
                 <div class="filename">
-                    Filename: <a href="">{{ post.filename }}</a> (900x900)
+                    Filename: <a>{{ post.filename }}</a>
                 </div>
             </div>
             <div class="post-content">
@@ -187,9 +188,7 @@
                     <div class="post-title">
                         <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} <a>No.{{ post.id }}</a>
                     </div>
-                    <div class="post-text">
-                        {{ post.content }}
-                    </div>
+                    <div class="post-text">{{ post.content }}</div>
                 </div>
             </div>
         </div>
