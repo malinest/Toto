@@ -1,9 +1,10 @@
 <!Doctype html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon"/>
+    <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon" />
     <title>{{ board.name }} - Toto</title>
     <style type="text/css">
         @import url("{{ url_for('static', filename='chota.css') }}");
@@ -11,9 +12,15 @@
         nav {
             border-bottom: 2px solid var(--color-secondary);
         }
+
+        nav > .nav-left > a {
+            cursor: pointer;
+        }
+
         section {
             padding: 10px;
         }
+
         .post {
             margin: 5px auto;
             display: flex;
@@ -21,44 +28,54 @@
             padding: 10px 10px 10px 10px;
             max-height: 300px;
         }
-        .post > .post-content {
+
+        .post>.post-content {
             display: flex;
             flex-direction: row;
             overflow: hidden;
             height: 100%;
         }
+
         .post .flex-container {
             display: flex;
             flex-direction: column;
         }
-        .post > .post-info {
+
+        .post>.post-info {
             margin-bottom: 5px;
         }
+
         .post .minimize-button {
             cursor: pointer;
             height: 20px;
             width: 20px;
         }
+
         .post .filename {
             font-size: 1.1rem;
             margin: 0 5px;
         }
+
         .post .post-title {
             font-size: 1.4rem;
         }
+
         .post .post-text {
             width: 40vw;
             overflow: auto;
             font-size: 1.2rem;
         }
-        .post > .post-content > .media {
+
+        .post>.post-content>.media {
             margin-right: 10px;
         }
-        .post > .post-content > .media > img {
+
+        .post>.post-content>.media>img {
             max-height: 200px;
             max-width: 400px;
             cursor: pointer;
         }
+
         #imageViewer {
             display: flex;
             align-items: center;
@@ -71,8 +88,38 @@
             margin: auto auto;
             width: 100vw;
             height: 100vh;
-            visibility: hidden;
+            display: none;
             background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        #post_form {
+            width: fit-content;
+            height: auto;
+            display: none;
+            position: absolute;
+            top: 60px;
+            left: 10px;
+        }
+
+        #post_form section {
+            font-size: small;
+        }
+
+        #post_form a {
+            font-size: small;
+        }
+
+        #post_form .row {
+            max-width: 20vw;
+        }
+
+        #post_form textarea {
+            min-width: 100%;
+            max-width: 100%;
+        }
+        
+        #post_form footer input {
+            margin: 0 5px;
         }
     </style>
     <script type="text/javascript">
@@ -83,7 +130,7 @@
             const imageViewer_image = document.getElementById("imageViewer_image");
             for(let image of images) {
                 image.addEventListener("click", () => {
-                    imageViewer.style.visibility = "visible";
+                    imageViewer.style.display = "flex";
                     imageViewer_image.src = image.src;
                 })
             }
@@ -91,14 +138,24 @@
 
         function closeImage() {
             const imageViewer = document.getElementById("imageViewer");
-            imageViewer.style.visibility = "hidden";
+            imageViewer.style.display = "none";
+        }board
+
+        function openPostForm() {
+            const post_form = document.getElementById("post_form");
+            post_form.style.display = "block";
+        }
+
+        function closePostForm() {
+            const post_form = document.getElementById("post_form");
+            post_form.style.display = "none";
         }
     </script>
 </head>
-<body onload="imageEventListeners()" >
+<body onload="imageEventListeners()">
     <nav class="nav bg-terciary">
         <div class="nav-left">
-
+            <a onclick="openPostForm()">Start a new thread</a>
         </div>
         <div class="nav-center">
             <a href="" class="brand">
@@ -140,6 +197,38 @@
     </section>
     <div id="imageViewer" onclick="closeImage()">
         <img src="" alt="Image" id="imageViewer_image">
+    </div>
+    <div id="post_form" class="card bd-primary bg-terciary">
+        <header>
+            <h4>Create post</h4>
+        </header>
+        <form action="/api/create_post?board={{ board.collection_name }}" method="post" enctype="multipart/form-data">
+            <section>
+                <div class="row">
+                    <div class="col-6">
+                        <input type="text" placeholder="Post title" size="100" name="title">
+                    </div>
+                    <div class="col-6">
+                        <input type="text" value="Anonymous" size="20" name="username">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <textarea placeholder="Post contents" name="content" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="media">Image</label>
+                        <input type="file" name="media"></textarea>
+                    </div>
+                </div>
+            </section>
+            <footer class="is-center">
+                <input type="submit" value="Submit">
+                <button type="reset" onclick="closePostForm()">Close</button>
+            </footer>
+        </form>
     </div>
 </body>
 </html>
