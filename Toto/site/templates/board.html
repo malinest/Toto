@@ -151,6 +151,24 @@
             const post_form = document.getElementById("post_form");
             post_form.style.display = "none";
         }
+
+        function minimizePost(element) {
+            //This function looks a bit whacky, look into optimizing it in the future 
+            const parentElement = element.parentElement;
+            const grandparentElement = parentElement.parentElement;
+            const childElement_postcontent = grandparentElement.querySelector(".post-content");
+            const childElement_postinfo = grandparentElement.querySelector(".post-info");
+            if(childElement_postcontent.style.display != "none") {
+                const post_title = childElement_postcontent.querySelector(".post-title");
+                childElement_postinfo.append(post_title);
+                childElement_postcontent.style.display = "none";
+            } else {
+                const post_title = childElement_postinfo.querySelector(".post-title");
+                childElement_postinfo.removeChild(post_title);
+                childElement_postcontent.querySelector(".flex-container").prepend(post_title);
+                childElement_postcontent.style.display = "flex";
+            }
+        }
     </script>
 </head>
 <body onload="imageEventListeners()">
@@ -173,7 +191,7 @@
         {% for post in posts %}
         <div class="post bg-terciary is-full-width is-rounded bd-primary">
             <div class="post-info is-vertical-align">
-                <div class="minimize-button is-rounded bd-primary bg-secondary is-center">
+                <div class="minimize-button is-rounded bd-primary bg-secondary is-center" onclick="minimizePost(this)">
                     -
                 </div>
                 <div class="filename">
