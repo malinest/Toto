@@ -111,7 +111,7 @@
         }
 
         #post_form .row {
-            max-width: 20vw;
+            max-width: 300px;
         }
 
         #post_form textarea {
@@ -177,7 +177,7 @@
             <a onclick="openPostForm()">Start a new thread</a>
         </div>
         <div class="nav-center">
-            <a href="" class="brand">
+            <a href="/" class="brand">
                 <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" class="hide-xs hide-sm">
                 {{ "/{0}/ {1}".format(board.abbreviation, board.name) }} 
             </a>
