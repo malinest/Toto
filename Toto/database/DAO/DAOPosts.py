@@ -36,3 +36,42 @@ def getRandomPosts():
         for result in results:
             posts.append(Post.from_json(result))
     return posts
+
+def getPostById(id, board):
+    """
+    Function that retrieves a post by it's id
+    Input example: 50, Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    result = collection.find_one({"_id": id})
+    if result:
+        return Post.from_json(result)
+    else:
+        return None
+
+def getPostByCommentId(comment_id, board):
+    """
+    Function that retrieves a post by a comment's id
+    Input example: 50, Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    result = collection.find_one({"comments._id": comment_id})
+    if result:
+        return Post.from_json(result)
+    else:
+        return None
+
+def getPostByIdOrCommentId(id, board):
+    """
+    Function that retrieves a post by an id, the id can be of the post or of one of the post's comments
+    Input example: 50, Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    result_post = collection.find_one({"_id": int(id)})
+    if result_post:
+        return Post.from_json(result_post)
+    result_comment = collection.find_one({"comments._id": int(id)})
+    if result_comment:
+        return Post.from_json(result_comment)
+    else:
+        return None

@@ -60,6 +60,10 @@
             font-size: 1.4rem;
         }
 
+        .post-title a {
+            cursor: pointer;
+        }
+
         .post .post-text {
             width: 40vw;
             overflow: auto;
@@ -122,6 +126,40 @@
         #post_form footer input {
             margin: 0 5px;
         }
+
+        #comment-form {
+            width: fit-content;
+            height: auto;
+            display: none;
+            position: fixed;
+            left: 83.5%;
+            top: 65px;
+        }
+
+        #comment-form #input-id {
+            display: none;
+        }
+
+        #comment-form section {
+            font-size: small;
+        }
+
+        #comment-form a {
+            font-size: small;
+        }
+
+        #comment-form .row {
+            max-width: 300px;
+        }
+
+        #comment-form textarea {
+            min-width: 100%;
+            max-width: 100%;
+        }
+        
+        #comment-form footer input {
+            margin: 0 5px;
+        }
     </style>
     <script type="text/javascript">
         //Replace this function in the future for something more readable/optimized
@@ -169,6 +207,18 @@
                 childElement_postcontent.style.display = "flex";
             }
         }
+
+        function openCommentForm(element) {
+            const input = document.getElementById("input-id");
+            const commentForm = document.getElementById("comment-form");
+            input.value = element.text;
+            commentForm.style.display = "block";
+        }
+
+        function closeCommentForm() {
+            const commentForm = document.getElementById("comment-form");
+            commentForm.style.display = "none";
+        }
     </script>
 </head>
 <body onload="imageEventListeners()">
@@ -204,7 +254,7 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} <a>No.{{ post.id }}</a>
+                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a onclick="openCommentForm(this)">{{ post.id }}</a>
                     </div>
                     <div class="post-text">{{ post.content }}</div>
                 </div>
@@ -244,6 +294,36 @@
             <footer class="is-center">
                 <input type="submit" value="Submit">
                 <button type="reset" onclick="closePostForm()">Close</button>
+            </footer>
+        </form>
+    </div>
+    <div id="comment-form", class="card bd-primary bg-terciary">
+        <header>
+            <h4>Create comment</h4>
+        </header>
+        <form action="/api/create_comment?board={{ board.collection_name }}" method="post" enctype="multipart/form-data">
+            <section>
+                <input type="text" id="input-id" name="id">
+                <div class="row">
+                    <div class="col-12">
+                        <input type="text" value="Anonymous" size="20" name="username">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <textarea placeholder="Post contents" name="content" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <label for="media">Image</label>
+                        <input type="file" name="media"></textarea>
+                    </div>
+                </div>
+            </section>
+            <footer class="is-center">
+                <input type="submit" value="Submit">
+                <button type="reset" onclick="closeCommentForm()">Close</button>
             </footer>
         </form>
     </div>
