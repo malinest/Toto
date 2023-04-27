@@ -30,3 +30,10 @@ def board(board):
     full_board = DAOBoard.getBoardByAbbreviation(board)
     posts = DAOPosts.getAllPostsFromBoard(full_board.collection_name)
     return render_template("board.html", board=full_board, posts=posts, result=200)
+
+#Posts
+bp_post = Blueprint("post", __name__, template_folder="templates/")
+
+@bp_post.route("/<board>/<post_id>", methods=['GET'])
+def post(board, post_id):
+    return render_template("post.html")
