@@ -116,10 +116,12 @@
 
         <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
             <div class="row">
-                {% for post in posts %}
+                {% for key, post in posts.items() %}
                 <div class="col-3 text-center">
-                    <p>{{ post.title }}</p>
-                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media">
+                    <p><b>{{ post.title }}</b></p>
+                    <a href="{{ '{0}/{1}'.format(key, post.id) }}">
+                        <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media">
+                    </a>
                     <p>{{ post.content }}</p>
                 </div>
                 {% endfor %}

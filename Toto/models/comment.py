@@ -6,7 +6,7 @@ class Comment():
     """
     Class for the comments
     """
-    id: int
+    _id: int
     username: str
     date: datetime
     media: str
