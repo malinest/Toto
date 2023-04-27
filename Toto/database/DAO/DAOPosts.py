@@ -25,7 +25,7 @@ def getRandomPosts():
     """
     Function that returns 8 random posts from different boards to be displayed on the main page
     """
-    posts = []
+    posts = {}
     pipeline = [
         {"$sample": {"size": 1}}
     ]
@@ -34,7 +34,7 @@ def getRandomPosts():
         collection = database[board.collection_name]
         results = collection.aggregate(pipeline)
         for result in results:
-            posts.append(Post.from_json(result))
+            posts[board.abbreviation] = Post.from_json(result)
     return posts
 
 def getPostById(id, board):
