@@ -97,7 +97,7 @@
                 </div>
                 {% if post.media %}
                 <div class="filename">
-                    Filename: <a>{{ post.filename }}</a> (<a onclick="openPost(this)">6 comments</a>)
+                    Filename: <a>{{ post.filename }}</a> (<a onclick="openPost(this)">{{ post.comments|length }} comment/s</a>)
                 </div>
                 {% endif %}
             </div>
