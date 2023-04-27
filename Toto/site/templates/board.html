@@ -4,170 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='board.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon" />
-    <title>{{ board.name }} - Toto</title>
-    <style type="text/css">
-        @import url("{{ url_for('static', filename='chota.css') }}");
-
-        nav {
-            border-bottom: 2px solid var(--color-secondary);
-        }
-
-        nav > .nav-left > a {
-            cursor: pointer;
-        }
-
-        section {
-            padding: 10px;
-        }
-
-        .post {
-            margin: 5px auto;
-            display: flex;
-            flex-direction: column;
-            padding: 10px 10px 10px 10px;
-            max-height: 300px;
-        }
-
-        .post > .post-content {
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            height: 100%;
-        }
-
-        .post .flex-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .post > .post-info {
-            margin-bottom: 5px;
-        }
-
-        .post .minimize-button {
-            cursor: pointer;
-            height: 20px;
-            width: 20px;
-        }
-
-        .post .filename {
-            font-size: 1.1rem;
-            margin: 0 5px;
-        }
-
-        .post .post-title {
-            font-size: 1.4rem;
-        }
-
-        .post-title a {
-            cursor: pointer;
-        }
-
-        .post .post-text {
-            width: 40vw;
-            overflow: auto;
-            font-size: 1.2rem;
-            white-space: pre-line;
-        }
-
-        .post > .post-content > .media {
-            margin-right: 10px;
-        }
-
-        .post > .post-content > .media > img {
-            max-height: 200px;
-            max-width: 400px;
-            cursor: pointer;
-        }
-
-        #imageViewer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            margin: auto auto;
-            width: 100vw;
-            height: 100vh;
-            display: none;
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        #post_form {
-            width: fit-content;
-            height: auto;
-            display: none;
-            position: absolute;
-            top: 60px;
-            left: 10px;
-        }
-
-        #post_form section {
-            font-size: small;
-        }
-
-        #post_form a {
-            font-size: small;
-        }
-
-        #post_form .row {
-            max-width: 300px;
-        }
-
-        #post_form textarea {
-            min-width: 100%;
-            max-width: 100%;
-        }
-        
-        #post_form footer input {
-            margin: 0 5px;
-        }
-
-        #comment-form {
-            width: fit-content;
-            height: auto;
-            display: none;
-            position: fixed;
-            left: 83.5%;
-            top: 65px;
-        }
-
-        #comment-form #input-id {
-            display: none;
-        }
-
-        #comment-form section {
-            font-size: small;
-        }
-
-        #comment-form a {
-            font-size: small;
-        }
-
-        #comment-form .row {
-            max-width: 300px;
-        }
-
-        #comment-form textarea {
-            min-width: 100%;
-            max-width: 100%;
-        }
-        
-        #comment-form footer input {
-            margin: 0 5px;
-        }
-    </style>
     <script type="text/javascript">
         //Replace this function in the future for something more readable/optimized
         function imageEventListeners() {
             const images = document.getElementsByClassName("Image");
             const imageViewer = document.getElementById("imageViewer");
             const imageViewer_image = document.getElementById("imageViewer_image");
-            for(let image of images) {
+            for (let image of images) {
                 image.addEventListener("click", () => {
                     imageViewer.style.display = "flex";
                     imageViewer_image.src = image.src;
@@ -196,7 +41,7 @@
             const grandparentElement = parentElement.parentElement;
             const childElement_postcontent = grandparentElement.querySelector(".post-content");
             const childElement_postinfo = grandparentElement.querySelector(".post-info");
-            if(childElement_postcontent.style.display != "none") {
+            if (childElement_postcontent.style.display != "none") {
                 const post_title = childElement_postcontent.querySelector(".post-title");
                 childElement_postinfo.append(post_title);
                 childElement_postcontent.style.display = "none";
@@ -219,7 +64,13 @@
             const commentForm = document.getElementById("comment-form");
             commentForm.style.display = "none";
         }
+
+        function openPost(element) {
+            const grandparentElement = element.parentElement.parentElement.parentElement;
+            window.location = `${grandparentElement.querySelector("#post-id").text}`;
+        }
     </script>
+    <title>{{ board.name }} - Toto</title>
 </head>
 <body onload="imageEventListeners()">
     <nav class="nav bg-terciary">
@@ -245,7 +96,7 @@
                     -
                 </div>
                 <div class="filename">
-                    Filename: <a>{{ post.filename }}</a>
+                    Filename: <a>{{ post.filename }}</a> (<a onclick="openPost(this)">6 comments</a>)
                 </div>
             </div>
             <div class="post-content">
@@ -254,7 +105,7 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a onclick="openCommentForm(this)">{{ post.id }}</a>
+                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this)">{{ post.id }}</a>
                     </div>
                     <div class="post-text">{{ post.content }}</div>
                 </div>
