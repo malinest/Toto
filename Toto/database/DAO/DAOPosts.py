@@ -43,7 +43,7 @@ def getPostById(id, board):
     Input example: 50, Board_Technology
     """
     collection = db.mongo[g.DATABASE_NAME][board]
-    result = collection.find_one({"_id": id})
+    result = collection.find_one({"_id": int(id)})
     if result:
         return Post.from_json(result)
     else:
@@ -55,7 +55,7 @@ def getPostByCommentId(comment_id, board):
     Input example: 50, Board_Technology
     """
     collection = db.mongo[g.DATABASE_NAME][board]
-    result = collection.find_one({"comments._id": comment_id})
+    result = collection.find_one({"comments._id": int(comment_id)})
     if result:
         return Post.from_json(result)
     else:

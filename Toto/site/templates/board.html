@@ -95,9 +95,11 @@
                 <div class="minimize-button is-rounded bd-primary bg-secondary is-center" onclick="minimizePost(this)">
                     -
                 </div>
+                {% if post.media %}
                 <div class="filename">
                     Filename: <a>{{ post.filename }}</a> (<a onclick="openPost(this)">6 comments</a>)
                 </div>
+                {% endif %}
             </div>
             <div class="post-content">
                 <div class="media">

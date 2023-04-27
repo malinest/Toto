@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ url_for('static', filename='board.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='post.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon" />
     <script type="text/javascript">
         //Replace this function in the future for something more readable/optimized
@@ -25,34 +25,6 @@
             imageViewer.style.display = "none";
         }
 
-        function openPostForm() {
-            const post_form = document.getElementById("post_form");
-            post_form.style.display = "block";
-        }
-
-        function closePostForm() {
-            const post_form = document.getElementById("post_form");
-            post_form.style.display = "none";
-        }
-
-        function minimizePost(element) {
-            //This function looks a bit whacky, look into optimizing it in the future 
-            const parentElement = element.parentElement;
-            const grandparentElement = parentElement.parentElement;
-            const childElement_postcontent = grandparentElement.querySelector(".post-content");
-            const childElement_postinfo = grandparentElement.querySelector(".post-info");
-            if (childElement_postcontent.style.display != "none") {
-                const post_title = childElement_postcontent.querySelector(".post-title");
-                childElement_postinfo.append(post_title);
-                childElement_postcontent.style.display = "none";
-            } else {
-                const post_title = childElement_postinfo.querySelector(".post-title");
-                childElement_postinfo.removeChild(post_title);
-                childElement_postcontent.querySelector(".flex-container").prepend(post_title);
-                childElement_postcontent.style.display = "flex";
-            }
-        }
-
         function openCommentForm(element) {
             const input = document.getElementById("input-id");
             const commentForm = document.getElementById("comment-form");
@@ -64,18 +36,13 @@
             const commentForm = document.getElementById("comment-form");
             commentForm.style.display = "none";
         }
-
-        function openPost(element) {
-            const grandparentElement = element.parentElement.parentElement.parentElement;
-            window.location = `${grandparentElement.querySelector("#post-id").text}`;
-        }
     </script>
-    <title>{{ board.name }} - Toto</title>
+    <title>{{ post.id }} - Toto</title>
 </head>
 <body onload="imageEventListeners()">
     <nav class="nav bg-terciary">
         <div class="nav-left">
-            <a onclick="openPostForm()">Start a new thread</a>
+
         </div>
         <div class="nav-center">
             <a href="/" class="brand">
@@ -89,15 +56,13 @@
         </div>
     </nav>
     <section>
-        {% for post in posts %}
         <div class="post bg-terciary is-full-width is-rounded bd-primary">
             <div class="post-info is-vertical-align">
-                <div class="minimize-button is-rounded bd-primary bg-secondary is-center" onclick="minimizePost(this)">
-                    -
-                </div>
+                {% if post.media %}
                 <div class="filename">
-                    Filename: <a>{{ post.filename }}</a> (<a onclick="openPost(this)">6 comments</a>)
+                    Filename: <a>{{ post.filename }}</a>
                 </div>
+                {% endif %}
             </div>
             <div class="post-content">
                 <div class="media">
@@ -110,43 +75,35 @@
                     <div class="post-text">{{ post.content }}</div>
                 </div>
             </div>
+            <div class="post-comments">
+                {% for comment in post.comments %}
+                <hr />
+                <div class="post">
+                    <div class="post-info is-vertical-align">
+                        {% if comment.media %}
+                        <div class="filename">
+                            Filename: <a>{{ comment.filename }}</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="post-content">
+                        <div class="media">
+                            <img src="data:image;base64,{{ comment.media.decode('utf-8') }}" alt="" class="Image">
+                        </div>
+                        <div class="flex-container">
+                            <div class="post-title">
+                                <span style="color: green;">{{ comment.username }}</span> {{ comment.date }} No.<a id="post-id" onclick="openCommentForm(this)">{{ comment._id }}</a>
+                            </div>
+                            <div class="post-text">{{ comment.content }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-        {% endfor %}
     </section>
     <div id="imageViewer" onclick="closeImage()">
         <img src="" alt="Image" id="imageViewer_image">
-    </div>
-    <div id="post_form" class="card bd-primary bg-terciary">
-        <header>
-            <h4>Create post</h4>
-        </header>
-        <form action="/api/create_post?board={{ board.collection_name }}" method="post" enctype="multipart/form-data">
-            <section>
-                <div class="row">
-                    <div class="col-6">
-                        <input type="text" placeholder="Post title" size="100" name="title">
-                    </div>
-                    <div class="col-6">
-                        <input type="text" value="Anonymous" size="20" name="username">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <textarea placeholder="Post contents" name="content" rows="5"></textarea>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <label for="media">Image</label>
-                        <input type="file" name="media"></textarea>
-                    </div>
-                </div>
-            </section>
-            <footer class="is-center">
-                <input type="submit" value="Submit">
-                <button type="reset" onclick="closePostForm()">Close</button>
-            </footer>
-        </form>
     </div>
     <div id="comment-form", class="card bd-primary bg-terciary">
         <header>

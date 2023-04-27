@@ -36,4 +36,6 @@ bp_post = Blueprint("post", __name__, template_folder="templates/")
 
 @bp_post.route("/<board>/<post_id>", methods=['GET'])
 def post(board, post_id):
-    return render_template("post.html")
+    full_board = DAOBoard.getBoardByAbbreviation(board)
+    post = DAOPosts.getPostById(post_id, full_board.collection_name)
+    return render_template("post.html", post=post, board=full_board)

@@ -20,7 +20,7 @@ section {
     max-height: 300px;
 }
 
-.post  >  .post-content {
+.post > .post-content {
     display: flex;
     flex-direction: row;
     overflow: hidden;
@@ -40,11 +40,12 @@ section {
     cursor: pointer;
     height: 20px;
     width: 20px;
+    margin-right: 5px;
 }
 
 .post .filename {
     font-size: 1.1rem;
-    margin: 0 5px;
+    margin-right: 5px;
 }
 
 .post .post-title {
