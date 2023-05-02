@@ -38,6 +38,16 @@
             const commentForm = document.getElementById("comment-form");
             commentForm.style.display = "none";
         }
+
+        function highlightResponse(element) {
+            const op = document.getElementById(element.text.substring(1));
+            op.style.backgroundColor = "rgba(0, 0, 0, 0.15)";
+        }
+
+        function unhighlightResponse(element) {
+            const op = document.getElementById(element.text.substring(1));
+            op.style.backgroundColor = null;
+        }
     </script>
     <title>{{ post.id }} - Toto</title>
 </head>
@@ -97,7 +107,7 @@
                                 <span style="color: green;">{{ comment.username }}</span> {{ comment.date }} No.<a id="post-id" onclick="openCommentForm(this)">{{ comment._id }}</a>
                             </div>
                             {% if comment.response_to %}
-                            <div class="responding-to"><a href="#{{ comment.response_to }}">>{{ comment.response_to }}</a></div>
+                            <div class="responding-to"><a href="#{{ comment.response_to }}" class="text-primary" onmouseover="highlightResponse(this)" onmouseleave="unhighlightResponse(this)">>{{ comment.response_to }}</a></div>
                             {% endif %}
                             <div class="post-text">{{ comment.content }}</div>
                         </div>
