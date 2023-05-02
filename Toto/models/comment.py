@@ -7,6 +7,7 @@ class Comment():
     Class for the comments
     """
     _id: int
+    response_to: int
     username: str
     date: datetime
     media: str

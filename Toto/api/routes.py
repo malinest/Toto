@@ -59,7 +59,7 @@ def create_comment():
     media = request.files["media"]
     post = DAOPosts.getPostByIdOrCommentId(data["id"], board)
     if post:
-        comment = {"_id": DAOCounter.getBoardSequence(board), "username": data["username"], "filename": media.filename, "media": base64.b64encode(media.read()), "date": datetime.now(), "content": data["content"]}
+        comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": media.filename, "media": base64.b64encode(media.read()), "date": datetime.now(), "content": data["content"]}
         collection = db.mongo[g.DATABASE_NAME][board]
         collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
         logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))

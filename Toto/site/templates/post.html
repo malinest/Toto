@@ -28,7 +28,9 @@
         function openCommentForm(element) {
             const input = document.getElementById("input-id");
             const commentForm = document.getElementById("comment-form");
+            const responseTo = document.getElementById("response-to");
             input.value = element.text;
+            responseTo.value = element.text;
             commentForm.style.display = "block";
         }
 
@@ -56,7 +58,7 @@
         </div>
     </nav>
     <section>
-        <div class="post bg-terciary is-full-width is-rounded bd-primary">
+        <div class="post bg-terciary is-full-width is-rounded bd-primary" name="{{ post.id }}">
             <div class="post-info is-vertical-align">
                 {% if post.media %}
                 <div class="filename">
@@ -78,7 +80,7 @@
             <div class="post-comments">
                 {% for comment in post.comments %}
                 <hr />
-                <div class="post">
+                <div class="post" id="{{ comment._id }}">
                     <div class="post-info is-vertical-align">
                         {% if comment.media %}
                         <div class="filename">
@@ -94,6 +96,9 @@
                             <div class="post-title">
                                 <span style="color: green;">{{ comment.username }}</span> {{ comment.date }} No.<a id="post-id" onclick="openCommentForm(this)">{{ comment._id }}</a>
                             </div>
+                            {% if comment.response_to %}
+                            <div class="responding-to"><a href="#{{ comment.response_to }}">>{{ comment.response_to }}</a></div>
+                            {% endif %}
                             <div class="post-text">{{ comment.content }}</div>
                         </div>
                     </div>
@@ -113,19 +118,22 @@
             <section>
                 <input type="text" id="input-id" name="id">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
+                        <input type="text" placeholder="Response id" name="response_to" id="response-to">
+                    </div>
+                    <div class="col-6">
                         <input type="text" value="Anonymous" size="20" name="username">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <textarea placeholder="Post contents" name="content" rows="5"></textarea>
+                        <textarea placeholder="Comment content" name="content" rows="5"></textarea>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12">
                         <label for="media">Image</label>
-                        <input type="file" name="media"></textarea>
+                        <input type="file" name="media"></input>
                     </div>
                 </div>
             </section>
