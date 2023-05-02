@@ -1,0 +1,10 @@
+@import url('board.css');
+
+.post {
+    max-height: fit-content !important;
+}
+
+.post > .post-content > .media > img {
+    max-height: 100px !important;
+    max-width: 200px !important;
+}

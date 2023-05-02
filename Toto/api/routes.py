@@ -6,11 +6,12 @@ import os
 from datetime import datetime
 
 from flask import Blueprint, Response, jsonify, request, redirect, url_for
-from pymongo.errors import DuplicateKeyError, OperationFailure
+from pymongo.errors import DuplicateKeyError, OperationFailure, CollectionInvalid
 
 import Toto.database.DAO.DAOCounter as DAOCounter
 import Toto.database.DAO.DAOUser as DAOUser
 import Toto.database.DAO.DAOBoard as DAOBoard
+import Toto.database.DAO.DAOPosts as DAOPosts
 import Toto.database.db as db
 from Toto.models.post import Post
 from Toto.models.user import User
@@ -26,7 +27,7 @@ bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
 def api_index():
     return "<p>This is the access point of the api<p>"
 
-#Create Post
+#Create post
 bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 
 @bp_create_post.route("/create_post", methods = ['POST'])
@@ -47,7 +48,44 @@ def create_post():
     else:
         return Response("Board not found", status=404)
 
-#Create User
+#Create comment
+
+bp_create_comment = Blueprint("create_comment", __name__, url_prefix="/api")
+
+@bp_create_comment.route("/create_comment", methods = ['POST'])
+def create_comment():
+    board = request.args.get("board")
+    data = request.form
+    media = request.files["media"]
+    post = DAOPosts.getPostByIdOrCommentId(data["id"], board)
+    if post:
+        comment = {"_id": DAOCounter.getBoardSequence(board), "username": data["username"], "filename": media.filename, "media": base64.b64encode(media.read()), "date": datetime.now(), "content": data["content"]}
+        collection = db.mongo[g.DATABASE_NAME][board]
+        collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
+        logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))
+        return Response("Comment created successfully", status=201)
+    else:
+        return Response("There is no post that has or contains this id", status=404)
+
+#Create board
+bp_create_board = Blueprint("create_board", __name__, url_prefix="/api")
+
+@bp_create_board.route("/create_board", methods = ['POST'])
+def create_board():
+    data = request.form
+    try:
+        db.mongo[g.DATABASE_NAME].create_collection(name="Board_{0}".format(data["board_name"].capitalize()), check_exists=True)
+        collection_boards = db.mongo[g.DATABASE_NAME]["Boards"]
+        board_data = {"collection_name": "Board_{0}".format(data["board_name"].capitalize()), "name": data["board_name"].capitalize(), "abbreviation": data["abbreviation"].lower()}
+        collection_boards.insert_one(board_data)
+        collection_counters = db.mongo[g.DATABASE_NAME]["Counters"]
+        counter_data = {"collection": "Board_{0}".format(data["board_name"].capitalize()), "sequence": 0}
+        collection_counters.insert_one(counter_data)
+        return Response("Board created successfully", status=201)
+    except CollectionInvalid:
+        return Response("A board with this name already exists", status=409)
+
+#Create user
 bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 
 @bp_create_user.route("/create_user", methods = ['POST'])
