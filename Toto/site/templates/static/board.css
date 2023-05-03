@@ -48,6 +48,10 @@ section {
     margin-right: 5px;
 }
 
+.post .filename .num-comments {
+    cursor: pointer;
+}
+
 .post .post-title {
     font-size: 1.4rem;
 }
