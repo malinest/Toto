@@ -22,7 +22,11 @@ An open source tool written in python to create imageboards
 
 First, clone the source code
 	
-	$ git https://github.com/malinest/Toto.git Toto
+	$ git https://github.com/malinest/Toto.git Toto && cd Toto
+
+Create a python virtual enviroment for the app to run
+
+	$ python3 -m venv toto-venv && source toto-venv/bin/activate
 
 Then install the requirements
 
@@ -30,7 +34,7 @@ Then install the requirements
 
 Once the installation finished you can run Toto by typing this on your console
 
-	waitress-serve --call 'flaskr:create_app'
+	$ gunicorn -w 4 "Toto.toto:create_app()"
 
 ## Configuration
 
