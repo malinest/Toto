@@ -42,7 +42,7 @@ def create_post():
         post = Post(DAOCounter.getBoardSequence(board.collection_name), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
         collection.insert_one(post.to_dict())
         logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
-        return redirect("/{0}/".format(board.abbreviation), code=201)
+        return redirect("/{0}/".format(board.abbreviation))
         #else:
         #    return Response("Invalid file extension", status=415)
     else:
@@ -63,7 +63,7 @@ def create_comment():
         collection = db.mongo[g.DATABASE_NAME][board]
         collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
         logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))
-        return Response("Comment created successfully", status=201)
+        return redirect("/{0}/{1}".format(board.abbreviation, post.id))
     else:
         return Response("There is no post that has or contains this id", status=404)
 
@@ -81,7 +81,7 @@ def create_board():
         collection_counters = db.mongo[g.DATABASE_NAME]["Counters"]
         counter_data = {"collection": "Board_{0}".format(data["board_name"].capitalize()), "sequence": 0}
         collection_counters.insert_one(counter_data)
-        return Response("Board created successfully", status=201)
+        return redirect("/{0}/".format(board_data["abbreviation"]))
     except CollectionInvalid:
         return Response("A board with this name already exists", status=409)
 
