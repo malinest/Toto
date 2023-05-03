@@ -63,7 +63,7 @@ def create_comment():
         collection = db.mongo[g.DATABASE_NAME][board]
         collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
         logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))
-        return redirect("/{0}/{1}".format(board.abbreviation, post.id))
+        return redirect("/{0}/{1}".format(DAOBoard.getBoardByCollectionName(board).abbreviation, post.id))
     else:
         return Response("There is no post that has or contains this id", status=404)
 
