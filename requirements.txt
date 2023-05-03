@@ -2,3 +2,4 @@ Flask
 pymongo
 Faker
 requests
+gunicorn
