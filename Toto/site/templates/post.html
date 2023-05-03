@@ -57,7 +57,7 @@
 
         </div>
         <div class="nav-center">
-            <a href="/" class="brand">
+            <a href="/{{ board.abbreviation }}/" class="brand">
                 <img src="{{ url_for('static', filename='logo.svg') }}" alt="Logo" class="hide-xs hide-sm">
                 {{ "/{0}/ {1}".format(board.abbreviation, board.name) }} 
             </a>
