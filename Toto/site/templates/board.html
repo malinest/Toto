@@ -105,7 +105,13 @@
             </div>
             <div class="post-content">
                 <div class="media">
+                    {% if post.filename.split('.')[-1] in ('jpg', 'png', 'jpeg', 'gif') %}
                     <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="" class="Image">
+                    {% elif  post.filename.split('.')[-1] in ('mp4', 'mkv') %}
+                    <video class="Image" controls>
+                        <source src="data:image;base64,{{ post.media.decode('utf-8') }}">
+                    </video>
+                    {% endif %}
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
