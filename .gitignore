@@ -129,4 +129,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.config.ini
+Toto/config.ini
+Toto/site/templates/static/images/*
+Toto/site/templates/static/videos/*
