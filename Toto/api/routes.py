@@ -1,7 +1,6 @@
 """
 Handles all the routes related to the api
 """
-import base64
 import os
 from datetime import datetime
 
@@ -18,7 +17,8 @@ from Toto.models.user import User
 from Toto.utils.logs import logger
 import Toto.utils.globals as g
 
-ALLOWED_EXTENSIONS = {".jpg", "jpeg", ".png", ".gif", ".mp4", ".mkv"}
+ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
+ALLOWED_VIDEO_EXTENSIONS = {"mp4", "mkv"}
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -38,13 +38,19 @@ def create_post():
         collection = db.mongo[g.DATABASE_NAME][board.collection_name]
         data = request.form
         media = request.files["media"]
-        #if os.path.splitext(media.filename)[1] in ALLOWED_EXTENSIONS:
-        post = Post(DAOCounter.getBoardSequence(board.collection_name), data["title"], data["username"], datetime.now(), base64.b64encode(media.read()), request.files["media"].filename, data["content"], [])
+        media_fileformat = media.filename.split(".")[-1]
+        path = None
+        if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+        elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
+            path = os.path.join(os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename)))
+        else:
+            return Response("Invalid file format", status=415)
+        media.save(path)
+        post = Post(DAOCounter.getBoardSequence(board.collection_name), data["title"], data["username"], datetime.now(), media.filename, data["content"], [])
         collection.insert_one(post.to_dict())
         logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
         return redirect("/{0}/".format(board.abbreviation))
-        #else:
-        #    return Response("Invalid file extension", status=415)
     else:
         return Response("Board not found", status=404)
 
@@ -57,9 +63,18 @@ def create_comment():
     board = request.args.get("board")
     data = request.form
     media = request.files["media"]
+    media_fileformat = media.filename.split(".")[-1]
+    path = None
+    if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
+        path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+    elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
+        path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename))
+    else:
+        return Response("Invalid file format", status=415)
+    media.save(path)
     post = DAOPosts.getPostByIdOrCommentId(data["id"], board)
     if post:
-        comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": media.filename, "media": base64.b64encode(media.read()), "date": datetime.now(), "content": data["content"]}
+        comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": media.filename, "date": datetime.now(), "content": data["content"]}
         collection = db.mongo[g.DATABASE_NAME][board]
         collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
         logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))

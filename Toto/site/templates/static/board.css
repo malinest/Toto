@@ -71,7 +71,7 @@ section {
     margin-right: 10px;
 }
 
-.post > .post-content > .media > img {
+.post > .post-content > .media > .Image {
     max-height: 200px;
     max-width: 400px;
     cursor: pointer;

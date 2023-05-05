@@ -70,7 +70,7 @@
     <section>
         <div class="post bg-terciary is-full-width is-rounded bd-primary" id="{{ post.id }}">
             <div class="post-info is-vertical-align">
-                {% if post.media %}
+                {% if post.filename %}
                 <div class="filename">
                     Filename: <a>{{ post.filename }}</a>
                 </div>
@@ -79,10 +79,10 @@
             <div class="post-content">
                 <div class="media">
                     {% if post.filename.split('.')[-1] in ('jpg', 'png', 'jpeg', 'gif') %}
-                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="" class="Image">
+                    <img src="{{ url_for('static', filename='images/' + post.filename) }}" alt="" class="Image">
                     {% elif  post.filename.split('.')[-1] in ('mp4', 'mkv') %}
                     <video class="Image" controls>
-                        <source src="data:video;base64,{{ post.media.decode('utf-8') }}">
+                        <source src="{{ url_for('static', filename='videos/' + post.filename) }}">
                     </video>
                     {% endif %}
                 </div>
@@ -98,7 +98,7 @@
                 <hr />
                 <div class="post" id="{{ comment._id }}">
                     <div class="post-info is-vertical-align">
-                        {% if comment.media %}
+                        {% if comment.filename %}
                         <div class="filename">
                             Filename: <a>{{ comment.filename }}</a>
                         </div>
@@ -106,7 +106,13 @@
                     </div>
                     <div class="post-content">
                         <div class="media">
-                            <img src="data:image;base64,{{ comment.media.decode('utf-8') }}" alt="" class="Image">
+                            {% if comment.filename.split('.')[-1] in ('jpg', 'png', 'jpeg', 'gif') %}
+                            <img src="{{ url_for('static', filename='images/' + comment.filename) }}" alt="" class="Image">
+                            {% elif  comment.filename.split('.')[-1] in ('mp4', 'mkv') %}
+                            <video class="Image" controls>
+                                <source src="{{ url_for('static', filename='videos/' + comment.filename) }}">
+                            </video>
+                            {% endif %}
                         </div>
                         <div class="flex-container">
                             <div class="post-title">
@@ -149,7 +155,7 @@
                 <div class="row">
                     <div class="col-12">
                         <label for="media">Image</label>
-                        <input type="file" name="media" accept="image/*"></input>
+                        <input type="file" name="media"></input>
                     </div>
                 </div>
             </section>

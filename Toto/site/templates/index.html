@@ -127,7 +127,13 @@
                 <div class="col-3 text-center">
                     <p><b>{{ post.title }}</b></p>
                     <a href="{{ '{0}/{1}'.format(key, post.id) }}">
-                        <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="Media">
+                        {% if post.filename.split('.')[-1] in ('jpg', 'png', 'jpeg', 'gif') %}
+                        <img src="{{ url_for('static', filename='images/' + post.filename) }}" alt="" class="Image">
+                        {% elif  post.filename.split('.')[-1] in ('mp4', 'mkv') %}
+                        <video class="Image" controls>
+                            <source src="{{ url_for('static', filename='videos/' + post.filename) }}">
+                        </video>
+                        {% endif %}
                     </a>
                     <p>{{ post.content }}</p>
                 </div>

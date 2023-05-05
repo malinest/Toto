@@ -10,6 +10,5 @@ class Comment():
     response_to: int
     username: str
     date: datetime
-    media: str
     filename: str
     content: str

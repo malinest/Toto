@@ -97,7 +97,7 @@
                 <div class="minimize-button is-rounded bd-primary bg-secondary is-center" onclick="minimizePost(this)">
                     -
                 </div>
-                {% if post.media %}
+                {% if post.filename %}
                 <div class="filename">
                     Filename: <a>{{ post.filename }}</a> (<a class="num-comments" onclick="openPost(this)">{{ post.comments|length }} comment/s</a>)
                 </div>
@@ -106,10 +106,10 @@
             <div class="post-content">
                 <div class="media">
                     {% if post.filename.split('.')[-1] in ('jpg', 'png', 'jpeg', 'gif') %}
-                    <img src="data:image;base64,{{ post.media.decode('utf-8') }}" alt="" class="Image">
+                    <img src="{{ url_for('static', filename='images/' + post.filename) }}" alt="" class="Image">
                     {% elif  post.filename.split('.')[-1] in ('mp4', 'mkv') %}
                     <video class="Image" controls>
-                        <source src="data:video;base64,{{ post.media.decode('utf-8') }}">
+                        <source src="{{ url_for('static', filename='videos/' + post.filename) }}">
                     </video>
                     {% endif %}
                 </div>
@@ -181,7 +181,7 @@
                 <div class="row">
                     <div class="col-12">
                         <label for="media">Image</label>
-                        <input type="file" name="media" accept="image/*"></textarea>
+                        <input type="file" name="media"></textarea>
                     </div>
                 </div>
             </section>
