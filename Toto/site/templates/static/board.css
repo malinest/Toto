@@ -103,8 +103,6 @@ section {
     height: auto;
     display: none;
     position: absolute;
-    top: 60px;
-    left: 10px;
 }
 
 #post_form section {
@@ -133,8 +131,6 @@ section {
     height: auto;
     display: none;
     position: fixed;
-    left: 83.5%;
-    top: 65px;
 }
 
 #comment-form #input-id {
