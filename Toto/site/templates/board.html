@@ -99,7 +99,7 @@
                 </div>
                 {% if post.filename %}
                 <div class="filename">
-                    Filename: <a>{{ post.filename }}</a> (<a class="num-comments" onclick="openPost(this)">{{ post.comments|length }} comment/s</a>)
+                    Filename: <a>{{ post.filename }}</a> (<a class="num-comments" onclick="openPost(this)">{{ post.comments|length }} comment/s</a>) {% if post.is_pinned%}<span title="Pinned">📌</span>{% endif %}
                 </div>
                 {% endif %}
             </div>

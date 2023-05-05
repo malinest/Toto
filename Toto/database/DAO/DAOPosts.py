@@ -17,7 +17,11 @@ def getAllPostsFromBoard(board):
     collection = db.mongo[g.DATABASE_NAME][board]
     result = collection.find({})
     for post in result:
-        posts.append(Post.from_json(post))
+        oPost = Post.from_json(post)
+        if oPost.is_pinned:
+            posts.insert(0, oPost)
+        else:
+            posts.append(oPost)
     logger.debug("Recieved {0} posts from {1}".format(len(posts), board))
     return posts
 

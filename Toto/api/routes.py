@@ -40,14 +40,15 @@ def create_post():
         media = request.files["media"]
         media_fileformat = media.filename.split(".")[-1]
         path = None
-        if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
-            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
-        elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
-            path = os.path.join(os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename)))
-        else:
-            return Response("Invalid file format", status=415)
-        media.save(path)
-        post = Post(DAOCounter.getBoardSequence(board.collection_name), data["title"], data["username"], datetime.now(), media.filename, data["content"], [])
+        if media:
+            if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
+                path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+            elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
+                path = os.path.join(os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename)))
+            else:
+                return Response("Invalid file format", status=415)
+            media.save(path)
+        post = Post(DAOCounter.getBoardSequence(board.collection_name), False, data["title"], data["username"], datetime.now(), media.filename, data["content"], [])
         collection.insert_one(post.to_dict())
         logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
         return redirect("/{0}/".format(board.abbreviation))
