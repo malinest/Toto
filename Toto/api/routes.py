@@ -66,13 +66,14 @@ def create_comment():
     media = request.files["media"]
     media_fileformat = media.filename.split(".")[-1]
     path = None
-    if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
-        path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
-    elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
-        path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename))
-    else:
-        return Response("Invalid file format", status=415)
-    media.save(path)
+    if media:
+        if media_fileformat in ALLOWED_IMAGE_EXTENSIONS:
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+        elif media_fileformat in ALLOWED_VIDEO_EXTENSIONS:
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename))
+        else:
+            return Response("Invalid file format", status=415)
+        media.save(path)
     post = DAOPosts.getPostByIdOrCommentId(data["id"], board)
     if post:
         comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": media.filename, "date": datetime.now(), "content": data["content"]}
