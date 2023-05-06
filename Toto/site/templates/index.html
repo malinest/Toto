@@ -79,8 +79,12 @@
         }
     </style>
     <script>
-        function openBoardForm() {
+        function openBoardForm(event) {
+            const relative_x = event.clientX;
+            const relative_y = event.clientY;
             const board_form = document.getElementById("board_form");
+            board_form.style.top = `${relative_y}px`;
+            board_form.style.left = `${relative_x}px`;
             board_form.style.display = "block";
         }
 
@@ -106,7 +110,7 @@
         
         <div class="tab bg-primary is-full-width is-rounded">
             <span class="text-white">Boards</span>
-            <span class="text-white" id="board_button" onclick="openBoardForm()">[+] New board</span>
+            <span class="text-white" id="board_button" onclick="openBoardForm(event)">[+] New board</span>
         </div>
 
         <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">
