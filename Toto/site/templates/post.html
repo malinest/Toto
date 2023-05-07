@@ -52,10 +52,28 @@
             const op = document.getElementById(element.text.substring(1));
             op.style.backgroundColor = null;
         }
+
+        function greenText() {
+            //This function fucking sucks lmao, someone please fix it.
+            //I spent 3 hours on this, I hate javascript
+            let contents = document.getElementsByClassName("post-text");
+            for(let text of contents) {
+                let elements = text.textContent.split("\n");
+                let newText = "";
+                for(let e in elements) {
+                    if(elements[e].substring(0, 1) == '>') {
+                        newText += `<span style='color:green;'>${elements[e]}\n</span>`;
+                    } else {
+                        newText += `${elements[e]}\n`;
+                    }
+                }
+                text.innerHTML = newText;
+            }
+        }
     </script>
     <title>{{ post.id }} - Toto</title>
 </head>
-<body onload="imageEventListeners()">
+<body onload="imageEventListeners(), greenText()">
     <nav class="nav bg-terciary">
         <div class="nav-left">
 
