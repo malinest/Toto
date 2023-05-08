@@ -4,11 +4,6 @@
     max-height: fit-content !important;
 }
 
-.post > .post-content > .media > .Image {
-    max-height: 100px !important;
-    max-width: 200px !important;
-}
-
 .post .responding-to > a{
     font-size: 1.2rem;
 }
