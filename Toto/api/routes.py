@@ -27,6 +27,17 @@ bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
 def api_index():
     return "<p>This is the access point of the api<p>"
 
+#Get posts
+bp_get_posts = Blueprint("get_posts", __name__, url_prefix="/api")
+
+@bp_get_posts.route("/get_posts", methods = ['GET'])
+def get_posts():
+    board = request.args.get('board')
+    if DAOBoard.checkIfBoardExists(board):
+        return jsonify(DAOPosts.getAllPostsFromBoard(board))
+    else:
+        return Response("Board {0} not found".format(board), status=404)
+
 #Create post
 bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 
@@ -54,7 +65,7 @@ def create_post():
         DAOPosts.deleteLastPostIfOverLimit(board.collection_name)
         return redirect("/{0}/".format(board.abbreviation))
     else:
-        return Response("Board not found", status=404)
+        return Response("Board {0} not found".format(board.collection_name), status=404)
 
 #Create comment
 
