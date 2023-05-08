@@ -79,3 +79,14 @@ def getPostByIdOrCommentId(id, board):
         return Post.from_json(result_comment)
     else:
         return None
+
+def deleteLastPostIfOverLimit(board):
+    """
+    Function that checks if a board has over 100 posts and deletes the older ones
+    Input example: Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    number_of_posts = collection.count_documents({})
+    if number_of_posts >= 100:
+        collection.delete_one({"is_pinned": False})
+        logger.debug("Deleted last post from {0}".format(board))

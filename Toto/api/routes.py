@@ -51,6 +51,7 @@ def create_post():
         post = Post(DAOCounter.getBoardSequence(board.collection_name), False, data["title"], data["username"], datetime.now(), media.filename, data["content"], [])
         collection.insert_one(post.to_dict())
         logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
+        DAOPosts.deleteLastPostIfOverLimit(board.collection_name)
         return redirect("/{0}/".format(board.abbreviation))
     else:
         return Response("Board not found", status=404)
