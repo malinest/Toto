@@ -41,6 +41,35 @@ def getRandomPosts():
             posts[board.abbreviation] = Post.from_json(result)
     return posts
 
+
+def getTrendingPosts():
+    """
+    Function that returns 8 posts with the most comments from all boards to be displayed on the main page
+    """
+    posts = {}
+    pipeline = [
+        {
+            '$addFields': {
+                'num_comments': {
+                    '$size': '$comments'
+                }
+            }
+        }, {
+            '$sort': {
+                'num_comments': -1
+            }
+        }, {
+            '$limit': 1
+        }
+    ]
+    database = db.mongo[g.DATABASE_NAME]
+    for board, i in zip(DAOBoard.getAllBoards(), range(8)):
+        collection = database[board.collection_name]
+        results = collection.aggregate(pipeline)
+        for result in results:
+            posts[board.abbreviation] = Post.from_json(result)
+    return posts
+
 def getPostById(id, board):
     """
     Function that retrieves a post by it's id
