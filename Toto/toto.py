@@ -2,6 +2,7 @@
 This file is the entry point for the application, it get's called automatically when running "flask run Toto" and contains a single method create_app().
 """
 
+import os
 from flask import Flask
 
 #Blueprint imports
@@ -15,6 +16,7 @@ def create_app():
     Creates the flask application and assigns all the blueprints to it
     """
     app = Flask(__name__, static_folder="site/templates/static")
+    app.secret_key = os.urandom(12).hex()
 
     app.register_blueprint(bp_api_index)
     app.register_blueprint(bp_get_posts)

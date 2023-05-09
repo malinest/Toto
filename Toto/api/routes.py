@@ -120,14 +120,13 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 @bp_create_user.route("/create_user", methods = ['POST'])
 def create_user():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
-    user = User(request.form["username"], request.form["email"], request.form["password"], request.form["birthday"], BytesIO(request.files["profile_picture"].read()), datetime.now())
+    user = User(request.form["username"], request.form["email"], request.form["password"], datetime.now())
     try:
         collection.insert_one(user.to_dict())
         logger.info("New user {0} created".format(user.username))
-        return Response("User {0} created successfully".format(user.username), status=201)
+        return redirect("/login")
     except DuplicateKeyError:
         return Response("Username {0} already exists".format(user.username), status=400)
-
 
 #Login
 bp_login = Blueprint("login", __name__, url_prefix="/api")
@@ -137,6 +136,6 @@ def login():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
     if user.password == request.form["password"]:
-        return Response("Logged in successfully", status=200)
+        return redirect("/")
     else:
         return Response("Loggin incorrect", status=401)
