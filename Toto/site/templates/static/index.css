@@ -1,0 +1,72 @@
+@import url("chota.css");
+
+a {
+    color: black;
+}
+
+.tab {
+    padding: 0 10px;
+    margin-bottom: 2px;
+    margin-top: 10px;
+}
+
+#board_button {
+    float: inline-end;
+    cursor: pointer;
+}
+
+.index-item {
+    margin: 10px auto;
+    max-width: 750px;
+}
+
+.col-3 {
+    font-size: 1.3rem;
+    max-height: 400px;
+    overflow: hidden;
+}
+
+#table {
+    padding: 10px;
+}
+
+#table .Image {
+    max-height: 150px;
+}
+
+footer {
+    font-size: 1.3rem;
+}
+
+footer > p {
+    margin: 10px 0;
+}
+
+footer a {
+    color: var(--color-primary);
+}
+
+#board_form {
+    width: fit-content;
+    height: auto;
+    display: none;
+    position: absolute;
+    right: 585px;
+    top: 131px;
+}
+
+#board_form section {
+    font-size: small;
+}
+
+#board_form a {
+    font-size: small;
+}
+
+#board_form .row {
+    max-width: 300px;
+}
+
+#board_form footer input {
+    margin: 0 5px;
+}

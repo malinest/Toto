@@ -135,7 +135,9 @@ bp_api_login = Blueprint("api_login", __name__, url_prefix="/api")
 def api_login():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
-    if user.password == request.form["password"]:
-        return redirect("/")
-    else:
-        return Response("Loggin incorrect", status=401)
+    if user:
+        if user.password == request.form["password"]:
+            return redirect("/")
+        else:
+            return Response("Invalid password for user {0}".format(user.username), status=401)
+    return Response("The user {0} doesn't exist".format(request.form["username"]), status=401)

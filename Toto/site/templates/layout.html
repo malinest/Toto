@@ -1,0 +1,37 @@
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>{% block title %}{% endblock %} - Toto</title>
+    <style>
+        body {
+            display: flex;
+            height: 95vh;
+            width: 100vw;
+        }
+
+        footer > *{
+            margin: 5px 10px;
+        }
+        
+        #form {
+            padding: 10px 80px;
+        }
+    </style>
+</head>
+<body>
+    <section class="index-item is-vertical-align is-horizontal-align">
+        <div id="form" class="card is-rounded bd-primary bg-terciary">
+            <header class="is-center">
+                <h3>
+                    {{ self.title() }}
+                </h3>
+            </header>
+            {% block form %}
+            {% endblock %}
+        </div>
+    </section>
+</body>
+</html>
