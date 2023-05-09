@@ -129,10 +129,10 @@ def create_user():
         return Response("Username {0} already exists".format(user.username), status=400)
 
 #Login
-bp_login = Blueprint("login", __name__, url_prefix="/api")
+bp_api_login = Blueprint("api_login", __name__, url_prefix="/api")
 
-@bp_login.route("/login", methods = ['POST'])
-def login():
+@bp_api_login.route("/login", methods = ['POST'])
+def api_login():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
     if user.password == request.form["password"]:

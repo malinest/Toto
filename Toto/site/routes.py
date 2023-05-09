@@ -39,3 +39,17 @@ def post(board, post_id):
     full_board = DAOBoard.getBoardByAbbreviation(board)
     post = DAOPosts.getPostById(post_id, full_board.collection_name)
     return render_template("post.html", post=post, board=full_board)
+
+#Login
+bp_login = Blueprint("login", __name__, template_folder="templates/", url_prefix="/user")
+
+@bp_login.route("/login", methods = ['GET'])
+def login():
+    return render_template("login.html")
+
+#Register
+bp_register = Blueprint("register", __name__, template_folder="templates/", url_prefix="/user")
+
+@bp_register.route("/register", methods = ['GET'])
+def register():
+    return render_template("register.html")
