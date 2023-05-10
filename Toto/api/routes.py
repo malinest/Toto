@@ -124,7 +124,8 @@ def create_user():
     if len(request.form["password"]) < 8:
         return Response("Invalid password length, the password must be at least 8 characters long", status=400)
     try:
-        user = User(request.form["username"], request.form["email"], hashlib.sha256(request.form["password"].encode("utf-8")).digest(), datetime.now())
+        salt = os.urandom(16)
+        user = User(request.form["username"], request.form["email"], hashlib.sha256(request.form["password"].encode("utf-8") + salt).digest(), salt, False, datetime.now())
         collection.insert_one(user.to_dict())
         logger.info("New user {0} created".format(user.username))
         return redirect("/user/login")
@@ -139,7 +140,7 @@ def api_login():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
     if user:
-        if user.password == hashlib.sha256(request.form["password"].encode("utf-8")).digest():
+        if user.password == hashlib.sha256(request.form["password"].encode("utf-8") + user.salt).digest():
             return redirect("/")
         else:
             return Response("Invalid password for user {0}".format(user.username), status=401)
