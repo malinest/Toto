@@ -4,10 +4,10 @@
 <form action="/api/create_user" method="post" enctype="multipart/form-data" onsubmit="checkIfPasswordsMatch(event)">
     <div class="row">
         <div class="col-12">
-            <input type="text" placeholder="Username" name="username" required>                    
+            <input type="text" placeholder="Username" name="username" onkeypress="checkSpace(event)" required>                    
         </div>
         <div class="col-12">
-            <input type="email" placeholder="Email" name="email" required>                    
+            <input type="email" placeholder="Email" name="email" onkeypress="checkSpace(event)" required>                    
         </div>
         <div class="col-12">
             <input type="password" placeholder="Password" name="password" id="input_password" minlength="8" required>

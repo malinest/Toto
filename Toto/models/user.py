@@ -9,7 +9,7 @@ class User():
     """
     username: str
     email: str
-    password: str
+    password: bytes
     creation_date: datetime
 
     def to_dict(self):
