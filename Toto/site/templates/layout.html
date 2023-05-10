@@ -13,6 +13,11 @@
             width: 100vw;
         }
 
+        section {
+            display: flex;
+            flex-direction: column;
+        }
+
         footer > *{
             margin: 5px 10px;
         }
@@ -41,6 +46,13 @@
 </head>
 <body>
     <section class="index-item is-vertical-align is-horizontal-align">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <h5>{{ message }}</h5>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <div id="form" class="card is-rounded bd-primary bg-terciary">
             <header class="is-center">
                 <h3>

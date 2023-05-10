@@ -5,7 +5,7 @@ import os
 import hashlib
 from datetime import datetime
 
-from flask import Blueprint, Response, jsonify, request, redirect, url_for
+from flask import Blueprint, Response, jsonify, request, redirect, url_for, session, flash
 from pymongo.errors import DuplicateKeyError, OperationFailure, CollectionInvalid
 
 import Toto.database.DAO.DAOCounter as DAOCounter
@@ -128,6 +128,7 @@ def create_user():
         user = User(request.form["username"], request.form["email"], hashlib.sha256(request.form["password"].encode("utf-8") + salt).digest(), salt, False, datetime.now())
         collection.insert_one(user.to_dict())
         logger.info("New user {0} created".format(user.username))
+        flash("User created successfully")
         return redirect("/user/login")
     except DuplicateKeyError:
         return Response("Username {0} already exists".format(user.username), status=400)
@@ -141,6 +142,7 @@ def api_login():
     user = DAOUser.getUserByUsername(request.form["username"])
     if user:
         if user.password == hashlib.sha256(request.form["password"].encode("utf-8") + user.salt).digest():
+            session["user"] = user.username
             return redirect("/")
         else:
             return Response("Invalid password for user {0}".format(user.username), status=401)
