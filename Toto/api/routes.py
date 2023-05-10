@@ -19,7 +19,7 @@ from Toto.utils.logs import logger
 import Toto.utils.globals as g
 
 ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
-ALLOWED_VIDEO_EXTENSIONS = {"mp4", "mkv"}
+ALLOWED_VIDEO_EXTENSIONS = {"mp4"}
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
