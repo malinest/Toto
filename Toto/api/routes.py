@@ -124,7 +124,7 @@ def create_user():
     try:
         collection.insert_one(user.to_dict())
         logger.info("New user {0} created".format(user.username))
-        return redirect("/login")
+        return redirect("/user/login")
     except DuplicateKeyError:
         return Response("Username {0} already exists".format(user.username), status=400)
 

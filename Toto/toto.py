@@ -27,7 +27,7 @@ def create_app():
     app.register_blueprint(bp_api_login)
     app.register_blueprint(bp_index)
     app.register_blueprint(bp_board)
-    app.register_blueprint(bp_post)
+    app.register_blueprint(bp_post, **{'url_defaults': {"/api/login": None, "/api/register": None}})
     app.register_blueprint(bp_login)
     app.register_blueprint(bp_register)
 
