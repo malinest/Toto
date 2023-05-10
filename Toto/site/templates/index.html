@@ -38,7 +38,9 @@
         
         <div class="tab bg-primary is-full-width is-rounded">
             <span class="text-white">Boards</span>
+            {% if session['is_admin'] == True %}
             <span class="text-white" id="board_button" onclick="openBoardForm(event)">[+] New board</span>
+            {% endif %}
         </div>
 
         <div id="table" class="bd-primary bg-terciary is-full-width is-rounded">

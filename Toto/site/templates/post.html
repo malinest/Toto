@@ -89,8 +89,12 @@
             </a>
         </div>
         <div class="nav-right">
-            <a href="">Sign up</a>
-            <a href="">Log in</a>
+            {% if not session['user'] %}
+            <a href="/user/register">Sign up</a>
+            <a href="/user/login">Log in</a>
+            {% else %}
+                <a>{{ session['user'] }}</a>
+            {% endif %}
         </div>
     </nav>
     <section>
@@ -170,7 +174,11 @@
                         <input type="text" placeholder="Response id" name="response_to" id="response-to">
                     </div>
                     <div class="col-6">
-                        <input type="text" value="Anonymous" size="20" name="username">
+                        {% if session['user'] %}
+                        <input type="text" value="{{ session['user']}}" name="username">
+                        {% else %}
+                        <input type="text" value="Anonymous" name="username">
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
