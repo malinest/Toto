@@ -97,6 +97,10 @@
                 text.innerHTML = newText;
             }
         }
+
+        function deletePost(element) {
+            window.location.href = `/api/delete_post?board={{ board.collection_name }}&post_id=${element.parentElement.querySelector("#post-id").textContent}`;
+        }
     </script>
     <title>{{ board.name }} - Toto</title>
 </head>
@@ -143,7 +147,7 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>
+                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deletePost(this)"> ❌</span>{% endif %}
                     </div>
                     <div class="post-text">{{ post.content }}</div>
                 </div>

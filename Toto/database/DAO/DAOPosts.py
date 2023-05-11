@@ -82,6 +82,14 @@ def getPostById(id, board):
     else:
         return None
 
+def deletePostById(id, board):
+    """
+    Function that deletes a post by it's id
+    Input example: 50, Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    return collection.delete_one({"_id": int(id)}).acknowledged
+
 def getPostByCommentId(comment_id, board):
     """
     Function that retrieves a post by a comment's id

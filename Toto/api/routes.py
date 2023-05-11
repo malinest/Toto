@@ -68,8 +68,27 @@ def create_post():
     else:
         return Response("Board {0} not found".format(board.collection_name), status=404)
 
-#Create comment
+#Delete post
+bp_delete_post = Blueprint("delete_post", __name__, url_prefix="/api")
 
+@bp_delete_post.route("/delete_post", methods = ['GET'])
+def delete_post():
+    board = request.args.get("board")
+    board = DAOBoard.getBoardByCollectionName(board)
+    post_id = request.args.get("post_id")
+    if session['is_admin']:
+        if DAOBoard.checkIfBoardExists(board.collection_name):
+            if DAOPosts.deletePostById(post_id, board.collection_name):
+                logger.info("Deleted post with id {0} in {1}".format(post_id, board.collection_name))
+                return redirect("/{0}/".format(board.abbreviation))
+            else:
+                return Response("Couldn't delete the post {0}".format(post_id), status=404)
+        else:
+            return Response("Board {0} not found".format(board.collection_name), status=404)
+    else:
+        return Response("You don't enough permissions to delete posts", status=403)
+
+#Create comment
 bp_create_comment = Blueprint("create_comment", __name__, url_prefix="/api")
 
 @bp_create_comment.route("/create_comment", methods = ['POST'])
