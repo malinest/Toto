@@ -5,7 +5,7 @@ This file is the entry point for the application, it get's called automatically 
 from flask import Flask
 
 #Blueprint imports
-from Toto.api.routes import bp_api_index, bp_get_posts, bp_create_post, bp_create_board, bp_create_user, bp_login, bp_create_comment
+from Toto.api.routes import bp_api_index, bp_get_posts, bp_get_boards, bp_create_post, bp_create_board, bp_create_user, bp_login, bp_create_comment
 from Toto.site.routes import bp_index, bp_board, bp_post
 
 
@@ -18,6 +18,7 @@ def create_app():
 
     app.register_blueprint(bp_api_index)
     app.register_blueprint(bp_get_posts)
+    app.register_blueprint(bp_get_boards)
     app.register_blueprint(bp_create_post)
     app.register_blueprint(bp_create_comment)
     app.register_blueprint(bp_create_board)
