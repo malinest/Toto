@@ -101,6 +101,13 @@
         function deletePost(element) {
             window.location.href = `/api/delete_post?board={{ board.collection_name }}&post_id=${element.parentElement.querySelector("#post-id").textContent}`;
         }
+
+        function logout() {
+            let dialog = confirm("Logout?");
+            if(dialog) {
+                window.location.href = "/api/logout";
+            }
+        }
     </script>
     <title>{{ board.name }} - Toto</title>
 </head>
@@ -120,7 +127,7 @@
             <a href="/user/register">Sign up</a>
             <a href="/user/login">Log in</a>
             {% else %}
-                <a>{{ session['user'] }}</a>
+                <a onclick="logout()">{{ session['user'] }}</a>
             {% endif %}
         </div>
     </nav>

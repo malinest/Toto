@@ -82,6 +82,13 @@
         function deleteComment(element) {
             window.location.href = `/api/delete_comment?board={{ board.collection_name }}&post_id=${document.getElementById("post-id").textContent}&comment_id=${element.parentElement.querySelector("#comment-id").textContent}`;
         }
+
+        function logout() {
+            let dialog = confirm("Logout?");
+            if(dialog) {
+                window.location.href = "/api/logout";
+            }
+        }
     </script>
     <title>{{ post.id }} - Toto</title>
 </head>
@@ -101,7 +108,7 @@
             <a href="/user/register">Sign up</a>
             <a href="/user/login">Log in</a>
             {% else %}
-                <a>{{ session['user'] }}</a>
+                <a onclick="logout()">{{ session['user'] }}</a>
             {% endif %}
         </div>
     </nav>
