@@ -4,6 +4,8 @@ This file is the entry point for the application, it get's called automatically 
 
 import os
 from flask import Flask
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 #Blueprint imports
 from Toto.api.routes import bp_api_index, bp_get_posts, bp_create_post, bp_delete_post, bp_create_board, bp_create_user, bp_api_login, bp_create_comment, bp_delete_comment
@@ -17,6 +19,11 @@ def create_app():
     """
     app = Flask(__name__, static_folder="site/templates/static")
     app.secret_key = os.urandom(12).hex()
+    limiter = Limiter(get_remote_address, app=app)
+
+    limiter.limit("1 per minute")(bp_create_post)
+    limiter.limit("1 per minute")(bp_create_comment)
+    limiter.limit("5 per hour")(bp_create_user)
 
     app.register_blueprint(bp_api_index)
     app.register_blueprint(bp_get_posts)
