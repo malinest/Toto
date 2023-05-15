@@ -149,18 +149,21 @@ bp_create_board = Blueprint("create_board", __name__, url_prefix="/api")
 
 @bp_create_board.route("/create_board", methods = ['POST'])
 def create_board():
-    data = request.form
-    try:
-        db.mongo[g.DATABASE_NAME].create_collection(name="Board_{0}".format(data["board_name"].capitalize()), check_exists=True)
-        collection_boards = db.mongo[g.DATABASE_NAME]["Boards"]
-        board_data = {"collection_name": "Board_{0}".format(data["board_name"].capitalize()), "name": data["board_name"].capitalize(), "abbreviation": data["abbreviation"].lower()}
-        collection_boards.insert_one(board_data)
-        collection_counters = db.mongo[g.DATABASE_NAME]["Counters"]
-        counter_data = {"collection": "Board_{0}".format(data["board_name"].capitalize()), "sequence": 0}
-        collection_counters.insert_one(counter_data)
-        return redirect("/{0}/".format(board_data["abbreviation"]))
-    except CollectionInvalid:
-        return Response("A board with this name already exists", status=409)
+    if session['is_admin']:
+        data = request.form
+        try:
+            db.mongo[g.DATABASE_NAME].create_collection(name="Board_{0}".format(data["board_name"].capitalize()), check_exists=True)
+            collection_boards = db.mongo[g.DATABASE_NAME]["Boards"]
+            board_data = {"collection_name": "Board_{0}".format(data["board_name"].capitalize()), "name": data["board_name"].capitalize(), "abbreviation": data["abbreviation"].lower()}
+            collection_boards.insert_one(board_data)
+            collection_counters = db.mongo[g.DATABASE_NAME]["Counters"]
+            counter_data = {"collection": "Board_{0}".format(data["board_name"].capitalize()), "sequence": 0}
+            collection_counters.insert_one(counter_data)
+            return redirect("/{0}/".format(board_data["abbreviation"]))
+        except CollectionInvalid:
+            return Response("A board with this name already exists", status=409)
+    else:
+        return Response("You don't have permissions to delete create boards", status=403)
 
 #Create user
 bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
