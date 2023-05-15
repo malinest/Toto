@@ -116,6 +116,27 @@ def create_comment():
     else:
         return Response("There is no post that has or contains this id", status=404)
 
+#Delete comment
+bp_delete_comment = Blueprint("delete_comment", __name__, url_prefix="/api")
+
+@bp_delete_comment.route("/delete_comment", methods = ['GET'])
+def delete_comment():
+    board = request.args.get("board")
+    board = DAOBoard.getBoardByCollectionName(board)
+    post_id = request.args.get("post_id")
+    comment_id = request.args.get("comment_id")
+    if session['is_admin']:
+        if DAOBoard.checkIfBoardExists(board.collection_name):
+            if DAOPosts.deleteCommentById(comment_id, post_id, board.collection_name):
+                logger.info("Deleted comment with id {0} on post {1} in {2}".format(comment_id, post_id, board.collection_name))
+                return redirect("/{0}/{1}".format(board.abbreviation, post_id))
+            else:
+                return Response("Couldn't delete the comment {0}".format(post_id), status=404)
+        else:
+            return Response("Board {0} not found".format(board.collection_name), status=404)
+    else:
+        return Response("You don't enough permissions to delete comments", status=403)
+
 #Create board
 bp_create_board = Blueprint("create_board", __name__, url_prefix="/api")
 

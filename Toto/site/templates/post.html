@@ -74,6 +74,14 @@
                 text.innerHTML = newText;
             }
         }
+
+        function deletePost(element) {
+            window.location.href = `/api/delete_post?board={{ board.collection_name }}&post_id=${element.parentElement.querySelector("#post-id").textContent}`;
+        }
+        
+        function deleteComment(element) {
+            window.location.href = `/api/delete_comment?board={{ board.collection_name }}&post_id=${document.getElementById("post-id").textContent}&comment_id=${element.parentElement.querySelector("#comment-id").textContent}`;
+        }
     </script>
     <title>{{ post.id }} - Toto</title>
 </head>
@@ -118,7 +126,7 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deletePost()"> ❌</span>{% endif %}
+                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deleteComment(this)"> ❌</span>{% endif %}
                     </div>
                     <div class="post-text">{{ post.content }}</div>
                 </div>
@@ -146,7 +154,7 @@
                         </div>
                         <div class="flex-container">
                             <div class="post-title">
-                                <span style="color: green;">{{ comment.username }}</span> {{ comment.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ comment._id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deletePost()"> ❌</span>{% endif %}
+                                <span style="color: green;">{{ comment.username }}</span> {{ comment.date }} No.<a id="comment-id" onclick="openCommentForm(this, event)">{{ comment._id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deleteComment(this)"> ❌</span>{% endif %}
                             </div>
                             {% if comment.response_to %}
                             <div class="responding-to"><a href="#{{ comment.response_to }}" class="text-primary" onmouseover="highlightResponse(this)" onmouseleave="unhighlightResponse(this)">>{{ comment.response_to }}{% if comment.response_to|int() == post.id|int() %}(OP){% endif %}</a></div>
