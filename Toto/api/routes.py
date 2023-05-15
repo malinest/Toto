@@ -184,6 +184,7 @@ def api_login():
         if user.password == hashlib.sha256(request.form["password"].encode("utf-8") + user.salt).digest():
             session["user"] = user.username
             session["is_admin"] = user.is_admin
+            session.permanent = True
             return redirect("/")
         else:
             return Response("Invalid password for user {0}".format(user.username), status=401)
