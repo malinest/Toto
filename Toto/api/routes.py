@@ -189,3 +189,14 @@ def api_login():
         else:
             return Response("Invalid password for user {0}".format(user.username), status=401)
     return Response("The user {0} doesn't exist".format(request.form["username"]), status=401)
+
+#Logout
+bp_api_logout = Blueprint("api_logout", __name__, url_prefix="/api")
+
+@bp_api_logout.route("/logout", methods = ['GET'])
+def api_logout():
+    if "user" in session.keys():
+        session.clear()
+        return redirect("/")
+    else:
+        return "You are not logged in"
