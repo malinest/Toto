@@ -8,7 +8,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 #Blueprint imports
-from Toto.api.routes import bp_api_index, bp_get_posts, bp_create_post, bp_delete_post, bp_create_board, bp_create_user, bp_api_login, bp_create_comment, bp_delete_comment, bp_api_logout
+from Toto.api.routes import bp_api_index, bp_get_posts, bp_create_post, bp_delete_post, bp_create_board, bp_create_user, bp_get_boards, bp_api_login, bp_create_comment, bp_delete_comment, bp_api_logout
 from Toto.site.routes import bp_index, bp_board, bp_post, bp_login, bp_register
 
 #Method that get's executed by flask and 
