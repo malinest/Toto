@@ -34,7 +34,7 @@ Then install the requirements
 
 Once the installation finished you can run Toto by typing this on your console
 
-	$ gunicorn -w 4 "Toto.toto:create_app()"
+	$ gunicorn -w 4 "Toto.toto:create_app()" --bind ip:port
 
 ## Configuration
 
@@ -49,6 +49,8 @@ Toto includes a [configuration file](https://github.com/malinest/Toto/blob/main/
 | LOG_LEVEL | Log level of the logger **on the terminal** | [DEBUG](https://docs.python.org/3/library/logging.html#logging-levels) |
 | LOG_FILE | Name of the generated log file | Toto.log |
 | LOG_FOLDER | Location where the logs will be stored | /var/log/Toto |
+| **Flask** |
+| SECRET_KEY | This is the key that is used by flask to sign the session cookies, so make it something secure and private | 9233dbf7cc629fa5c5de72a657a079f4
 
 ## Screenshots
 
