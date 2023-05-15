@@ -10,6 +10,7 @@ from flask_limiter.util import get_remote_address
 #Blueprint imports
 from Toto.api.routes import bp_api_index, bp_get_posts, bp_create_post, bp_delete_post, bp_create_board, bp_create_user, bp_get_boards, bp_api_login, bp_create_comment, bp_delete_comment, bp_api_logout
 from Toto.site.routes import bp_index, bp_board, bp_post, bp_login, bp_register
+import Toto.utils.globals as g
 
 #Method that get's executed by flask and 
 def create_app():
@@ -17,7 +18,8 @@ def create_app():
     Creates the flask application and assigns all the blueprints to it
     """
     app = Flask(__name__, static_folder="site/templates/static")
-    app.secret_key = os.urandom(12).hex()
+    app.config["SECRET_KEY"] = g.SECRET_KEY
+    app.config["SESSION_COOKIE_NAME"] = "session"
     limiter = Limiter(get_remote_address, app=app)
 
     limiter.limit("1 per minute")(bp_create_post)

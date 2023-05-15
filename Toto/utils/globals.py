@@ -12,3 +12,6 @@ DATABASE_NAME = config_loader.getConfig("Database", "DATABASE_NAME")
 LOG_LEVEL = config_loader.getConfig("Logging", "LOG_LEVEL")
 LOG_FILE = config_loader.getConfig("Logging", "LOG_FILE")
 LOG_FOLDER = config_loader.getConfig("Logging", "LOG_FOLDER")
+
+#Flask settings
+SECRET_KEY = config_loader.getConfig("Flask", "SECRET_KEY")
