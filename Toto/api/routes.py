@@ -28,6 +28,13 @@ bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
 def api_index():
     return "<p>This is the access point of the api<p>"
 
+#Get boards
+bp_get_boards = Blueprint("get_boards", __name__, url_prefix="/api")
+
+@bp_get_boards.route("/get_boards", methods = ['GET'])
+def get_boards():
+    return jsonify(DAOBoard.getAllBoards())
+
 #Get posts
 bp_get_posts = Blueprint("get_posts", __name__, url_prefix="/api")
 
