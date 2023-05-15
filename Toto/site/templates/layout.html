@@ -1,0 +1,67 @@
+<!Doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <link href="{{ url_for('static', filename='logo.ico') }}" type="image/x-icon" rel="icon" />
+    <title>{% block title %}{% endblock %} - Toto</title>
+    <style>
+        body {
+            display: flex;
+            height: 95vh;
+            width: 100vw;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        footer > *{
+            margin: 5px 10px;
+        }
+        
+        #form {
+            padding: 10px 80px;
+        }
+    </style>
+    <script>
+        function checkIfPasswordsMatch(event) {
+            const password = document.getElementById("input_password").value;
+            const repeat_password = document.getElementById("input_repeat_password").value;
+            if(password !== repeat_password) {
+                alert("The passwords don't match!");
+                event.preventDefault();
+            }
+        }
+        
+        function checkSpace(event) {
+            if(event.which == 32) {
+                event.preventDefault();
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <section class="index-item is-vertical-align is-horizontal-align">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <h5>{{ message }}</h5>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div id="form" class="card is-rounded bd-primary bg-terciary">
+            <header class="is-center">
+                <h3>
+                    {{ self.title() }}
+                </h3>
+            </header>
+            {% block form %}
+            {% endblock %}
+        </div>
+    </section>
+</body>
+</html>

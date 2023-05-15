@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block form %}
+<form action="/api/login" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-12">
+            <input type="text" placeholder="Username" name="username" onkeypress="checkSpace(event)" required>                    
+        </div>
+        <div class="col-12">
+            <input type="password" placeholder="Password" name="password" minlength="8" required>
+        </div>
+    </div>
+    <footer class="is-center">
+        <input type="submit" value="Submit">
+        <button type="reset">Clear</button>
+    </footer>
+</form>
+{% endblock %}

@@ -97,6 +97,17 @@
                 text.innerHTML = newText;
             }
         }
+
+        function deletePost(element) {
+            window.location.href = `/api/delete_post?board={{ board.collection_name }}&post_id=${element.parentElement.querySelector("#post-id").textContent}`;
+        }
+
+        function logout() {
+            let dialog = confirm("Logout?");
+            if(dialog) {
+                window.location.href = "/api/logout";
+            }
+        }
     </script>
     <title>{{ board.name }} - Toto</title>
 </head>
@@ -112,8 +123,12 @@
             </a>
         </div>
         <div class="nav-right">
-            <a href="">Sign up</a>
-            <a href="">Log in</a>
+            {% if not session['user'] %}
+            <a href="/user/register">Sign up</a>
+            <a href="/user/login">Log in</a>
+            {% else %}
+                <a onclick="logout()">{{ session['user'] }}</a>
+            {% endif %}
         </div>
     </nav>
     <section>
@@ -139,7 +154,7 @@
                 </div>
                 <div class="flex-container">
                     <div class="post-title">
-                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>
+                        <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deletePost(this)"> ❌</span>{% endif %}
                     </div>
                     <div class="post-text">{{ post.content }}</div>
                 </div>
@@ -158,10 +173,14 @@
             <section>
                 <div class="row">
                     <div class="col-6">
-                        <input type="text" placeholder="Post title" size="100" name="title">
+                        <input type="text" placeholder="Post title" maxlength="100" name="title">
                     </div>
                     <div class="col-6">
-                        <input type="text" value="Anonymous" size="20" name="username">
+                        {% if session['user'] %}
+                        <input type="text" value="{{ session['user']}}" name="username">
+                        {% else %}
+                        <input type="text" value="Anonymous" name="username">
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">
@@ -194,7 +213,11 @@
                         <input type="text" placeholder="Response id" name="response_to" id="response-to" readonly>
                     </div>
                     <div class="col-6">
-                        <input type="text" value="Anonymous" size="20" name="username" required>
+                        {% if session['user'] %}
+                        <input type="text" value="{{ session['user']}}" name="username">
+                        {% else %}
+                        <input type="text" value="Anonymous" name="username">
+                        {% endif %}
                     </div>
                 </div>
                 <div class="row">

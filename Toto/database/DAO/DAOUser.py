@@ -2,7 +2,7 @@
 DAO for the users collection
 """
 
-import Toto.database.db
+import Toto.database.db as db
 from Toto.models.user import User
 import Toto.utils.globals as g
 from flask import jsonify

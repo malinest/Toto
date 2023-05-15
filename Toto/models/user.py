@@ -9,14 +9,14 @@ class User():
     """
     username: str
     email: str
-    password: str
-    birthday: datetime
-    profile_picture: BytesIO
+    password: bytes
+    salt: bytes
+    is_admin: bool
     creation_date: datetime
 
     def to_dict(self):
-        return {"username": self.username, "email": self.email, "password": self.password, "birthday": self.birthday, "profile_picture": self.profile_picture.getvalue(), "creation_date": self.creation_date}
+        return {"username": self.username, "email": self.email, "password": self.password, "salt": self.salt, "is_admin": self.is_admin, "creation_date": self.creation_date}
 
     @staticmethod
     def from_json(json_dict, **kwargs):
-        return User(json_dict["username"], json_dict["email"], json_dict["password"], json_dict["profile_picture"], json_dict["birthday"], json_dict["creation_date"])
+        return User(json_dict["username"], json_dict["email"], json_dict["password"], json_dict["salt"], json_dict["is_admin"], json_dict["creation_date"])

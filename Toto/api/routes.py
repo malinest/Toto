@@ -2,9 +2,10 @@
 Handles all the routes related to the api
 """
 import os
+import hashlib
 from datetime import datetime
 
-from flask import Blueprint, Response, jsonify, request, redirect, url_for
+from flask import Blueprint, Response, jsonify, request, redirect, url_for, session, flash
 from pymongo.errors import DuplicateKeyError, OperationFailure, CollectionInvalid
 
 import Toto.database.DAO.DAOCounter as DAOCounter
@@ -18,7 +19,7 @@ from Toto.utils.logs import logger
 import Toto.utils.globals as g
 
 ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
-ALLOWED_VIDEO_EXTENSIONS = {"mp4", "mkv"}
+ALLOWED_VIDEO_EXTENSIONS = {"mp4"}
 
 #Index
 bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
@@ -74,8 +75,27 @@ def create_post():
     else:
         return Response("Board {0} not found".format(board.collection_name), status=404)
 
-#Create comment
+#Delete post
+bp_delete_post = Blueprint("delete_post", __name__, url_prefix="/api")
 
+@bp_delete_post.route("/delete_post", methods = ['GET'])
+def delete_post():
+    board = request.args.get("board")
+    board = DAOBoard.getBoardByCollectionName(board)
+    post_id = request.args.get("post_id")
+    if session['is_admin']:
+        if DAOBoard.checkIfBoardExists(board.collection_name):
+            if DAOPosts.deletePostById(post_id, board.collection_name):
+                logger.info("Deleted post with id {0} in {1}".format(post_id, board.collection_name))
+                return redirect("/{0}/".format(board.abbreviation))
+            else:
+                return Response("Couldn't delete the post {0}".format(post_id), status=404)
+        else:
+            return Response("Board {0} not found".format(board.collection_name), status=404)
+    else:
+        return Response("You don't enough permissions to delete posts", status=403)
+
+#Create comment
 bp_create_comment = Blueprint("create_comment", __name__, url_prefix="/api")
 
 @bp_create_comment.route("/create_comment", methods = ['POST'])
@@ -103,6 +123,27 @@ def create_comment():
     else:
         return Response("There is no post that has or contains this id", status=404)
 
+#Delete comment
+bp_delete_comment = Blueprint("delete_comment", __name__, url_prefix="/api")
+
+@bp_delete_comment.route("/delete_comment", methods = ['GET'])
+def delete_comment():
+    board = request.args.get("board")
+    board = DAOBoard.getBoardByCollectionName(board)
+    post_id = request.args.get("post_id")
+    comment_id = request.args.get("comment_id")
+    if session['is_admin']:
+        if DAOBoard.checkIfBoardExists(board.collection_name):
+            if DAOPosts.deleteCommentById(comment_id, post_id, board.collection_name):
+                logger.info("Deleted comment with id {0} on post {1} in {2}".format(comment_id, post_id, board.collection_name))
+                return redirect("/{0}/{1}".format(board.abbreviation, post_id))
+            else:
+                return Response("Couldn't delete the comment {0}".format(post_id), status=404)
+        else:
+            return Response("Board {0} not found".format(board.collection_name), status=404)
+    else:
+        return Response("You don't enough permissions to delete comments", status=403)
+
 #Create board
 bp_create_board = Blueprint("create_board", __name__, url_prefix="/api")
 
@@ -127,23 +168,42 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 @bp_create_user.route("/create_user", methods = ['POST'])
 def create_user():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
-    user = User(request.form["username"], request.form["email"], request.form["password"], request.form["birthday"], BytesIO(request.files["profile_picture"].read()), datetime.now())
+    if len(request.form["password"]) < 8:
+        return Response("Invalid password length, the password must be at least 8 characters long", status=400)
     try:
+        salt = os.urandom(16)
+        user = User(request.form["username"], request.form["email"], hashlib.sha256(request.form["password"].encode("utf-8") + salt).digest(), salt, False, datetime.now())
         collection.insert_one(user.to_dict())
         logger.info("New user {0} created".format(user.username))
-        return Response("User {0} created successfully".format(user.username), status=201)
+        flash("User created successfully")
+        return redirect("/user/login")
     except DuplicateKeyError:
         return Response("Username {0} already exists".format(user.username), status=400)
 
-
 #Login
-bp_login = Blueprint("login", __name__, url_prefix="/api")
+bp_api_login = Blueprint("api_login", __name__, url_prefix="/api")
 
-@bp_login.route("/login", methods = ['POST'])
-def login():
+@bp_api_login.route("/login", methods = ['POST'])
+def api_login():
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
-    if user.password == request.form["password"]:
-        return Response("Logged in successfully", status=200)
+    if user:
+        if user.password == hashlib.sha256(request.form["password"].encode("utf-8") + user.salt).digest():
+            session["user"] = user.username
+            session["is_admin"] = user.is_admin
+            session.permanent = True
+            return redirect("/")
+        else:
+            return Response("Invalid password for user {0}".format(user.username), status=401)
+    return Response("The user {0} doesn't exist".format(request.form["username"]), status=401)
+
+#Logout
+bp_api_logout = Blueprint("api_logout", __name__, url_prefix="/api")
+
+@bp_api_logout.route("/logout", methods = ['GET'])
+def api_logout():
+    if "user" in session.keys():
+        session.clear()
+        return redirect("/")
     else:
-        return Response("Loggin incorrect", status=401)
+        return "You are not logged in"
