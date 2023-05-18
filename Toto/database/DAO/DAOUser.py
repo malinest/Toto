@@ -7,7 +7,7 @@ from Toto.models.user import User
 import Toto.utils.globals as g
 from flask import jsonify
 
-def getAllUsers() -> list(User):
+def getAllUsers() -> list[User]:
     """
     Retrieves all the users from the database
     """

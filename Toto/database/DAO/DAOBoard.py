@@ -7,7 +7,7 @@ import Toto.utils.globals as g
 from Toto.models.board import Board
 from Toto.utils.logs import logger
 
-def getAllBoards() -> list(Board):
+def getAllBoards() -> list[Board]:
     """
     Retrieves all the boards from the database and returns a list of them
     """

@@ -8,7 +8,7 @@ from Toto.utils.logs import logger
 import Toto.utils.globals as g
 import Toto.database.DAO.DAOBoard as DAOBoard
 
-def getAllPostsFromBoard(board) -> list(Post):
+def getAllPostsFromBoard(board) -> list[Post]:
     """
     Retrieves all posts from a specified board by it's name
     Example:
@@ -26,7 +26,7 @@ def getAllPostsFromBoard(board) -> list(Post):
     logger.debug("Recieved {0} posts from {1}".format(len(posts), board))
     return posts
 
-def getRandomPosts() -> dict(str, Post):
+def getRandomPosts() -> dict[str: Post]:
     """
     Function that returns 8 random posts from different boards to be displayed on the main page
     """
@@ -43,7 +43,7 @@ def getRandomPosts() -> dict(str, Post):
     return posts
 
 
-def getTrendingPosts() -> dict(str, Post):
+def getTrendingPosts() -> dict[str: Post]:
     """
     Function that returns 8 posts with the most comments from all boards to be displayed on the main page
     """
