@@ -35,6 +35,8 @@ Then install the requirements
 Once the installation finished you can run Toto by typing this on your console
 
 	$ gunicorn -w 4 "Toto.toto:create_app()" --bind ip:port
+	
+As with all python wsgi applications it's highly recommended to place gunicorn behind a reverse proxy
 
 ## Configuration
 
