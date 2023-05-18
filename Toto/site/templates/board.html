@@ -81,20 +81,13 @@
         }
 
         function greenText() {
-            //This function fucking sucks lmao, someone please fix it.
-            //I spent 3 hours on this, I hate javascript
-            let contents = document.getElementsByClassName("post-text");
-            for(let text of contents) {
-                let elements = text.textContent.split("\n");
-                let newText = "";
-                for(let e in elements) {
-                    if(elements[e].substring(0, 1) == '>') {
-                        newText += `<span style='color:green;'>${elements[e]}\n</span>`;
-                    } else {
-                        newText += `${elements[e]}\n`;
+            let posts = document.getElementsByClassName("post-text");
+            for(let post of posts) {
+                for(let span of post.getElementsByTagName("span")) {
+                    if(span.textContent.startsWith(">")) {
+                        span.style.color = "green";
                     }
                 }
-                text.innerHTML = newText;
             }
         }
 
@@ -156,7 +149,7 @@
                     <div class="post-title">
                         <span style="color: blue;">{{ post.title }}</span> <span style="color: green;">{{ post.username }}</span> {{ post.date }} No.<a id="post-id" onclick="openCommentForm(this, event)">{{ post.id }}</a>{% if session['is_admin'] %}<span title="Delete post" style="cursor: pointer;" onclick="deletePost(this)"> ❌</span>{% endif %}
                     </div>
-                    <div class="post-text">{{ post.content }}</div>
+                    <div class="post-text">{% with split = post.content.split('\n') %}{% for line in split %}<span>{{ line }}</span>{% endfor %}{% endwith %}</div>
                 </div>
             </div>
         </div>
