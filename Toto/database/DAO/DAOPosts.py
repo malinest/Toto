@@ -8,10 +8,11 @@ from Toto.utils.logs import logger
 import Toto.utils.globals as g
 import Toto.database.DAO.DAOBoard as DAOBoard
 
-def getAllPostsFromBoard(board):
+def getAllPostsFromBoard(board) -> list(Post):
     """
     Retrieves all posts from a specified board by it's name
-    Example: Board_Technology
+    Example:
+        board: "Board_Technology"
     """
     posts = []
     collection = db.mongo[g.DATABASE_NAME][board]
@@ -25,7 +26,7 @@ def getAllPostsFromBoard(board):
     logger.debug("Recieved {0} posts from {1}".format(len(posts), board))
     return posts
 
-def getRandomPosts():
+def getRandomPosts() -> dict(str, Post):
     """
     Function that returns 8 random posts from different boards to be displayed on the main page
     """
@@ -42,7 +43,7 @@ def getRandomPosts():
     return posts
 
 
-def getTrendingPosts():
+def getTrendingPosts() -> dict(str, Post):
     """
     Function that returns 8 posts with the most comments from all boards to be displayed on the main page
     """
@@ -70,10 +71,12 @@ def getTrendingPosts():
             posts[board.abbreviation] = Post.from_json(result)
     return posts
 
-def getPostById(id, board):
+def getPostById(id, board) -> Post:
     """
     Function that retrieves a post by it's id
-    Input example: 50, Board_Technology
+    Example:
+        id: 50
+        board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     result = collection.find_one({"_id": int(id)})
@@ -85,7 +88,9 @@ def getPostById(id, board):
 def deletePostById(id, board):
     """
     Function that deletes a post by it's id
-    Input example: 50, Board_Technology
+    Example:
+        id: 50
+        board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     return collection.delete_one({"_id": int(id)}).acknowledged
@@ -93,15 +98,20 @@ def deletePostById(id, board):
 def deleteCommentById(comment_id, post_id, board):
     """
     Function that deletes a comment form a post by their ids
-    Input example: 4, 3, Board_Technology
+    Example:
+      comment_id: 4
+      post_id: 3
+      board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     return collection.update_one({"_id": int(post_id)}, {"$pull": {"comments": {"_id": int(comment_id)}}})
 
-def getPostByCommentId(comment_id, board):
+def getPostByCommentId(comment_id, board) -> Post:
     """
     Function that retrieves a post by a comment's id
-    Input example: 50, Board_Technology
+    Example:
+      comment_id: 4
+      board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     result = collection.find_one({"comments._id": int(comment_id)})
@@ -110,10 +120,12 @@ def getPostByCommentId(comment_id, board):
     else:
         return None
 
-def getPostByIdOrCommentId(id, board):
+def getPostByIdOrCommentId(id, board) -> Post:
     """
     Function that retrieves a post by an id, the id can be of the post or of one of the post's comments
-    Input example: 50, Board_Technology
+    Example:
+      id: 4
+      board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     result_post = collection.find_one({"_id": int(id)})
@@ -128,7 +140,8 @@ def getPostByIdOrCommentId(id, board):
 def deleteLastPostIfOverLimit(board):
     """
     Function that checks if a board has over 100 posts and deletes the older ones
-    Input example: Board_Technology
+    Example:
+        board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
     number_of_posts = collection.count_documents({})

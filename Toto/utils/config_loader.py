@@ -14,5 +14,11 @@ else:
     raise FileNotFoundError("Can't find the config file")
 
 def getConfig(section, parameter):
+    """
+    Reads a config from the file.
+    Example:
+        section: Database
+        parameter: DATABASE_NAME
+    """
     value = parser[section][parameter]
     return value

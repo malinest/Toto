@@ -7,7 +7,7 @@ import Toto.utils.globals as g
 from Toto.models.board import Board
 from Toto.utils.logs import logger
 
-def getAllBoards():
+def getAllBoards() -> list(Board):
     """
     Retrieves all the boards from the database and returns a list of them
     """
@@ -19,9 +19,11 @@ def getAllBoards():
     logger.debug("Retrieved {0} boards".format(len(boards)))
     return boards
 
-def getBoardByAbbreviation(boardAbbreviation):
+def getBoardByAbbreviation(boardAbbreviation) -> Board:
     """
-    Retrieves a board by it's abbreviation
+    Retrieves a board by it's abbreviation.
+    Example:
+        boardAbbreviation: /g/
     """
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find_one({'abbreviation': boardAbbreviation})
@@ -30,9 +32,11 @@ def getBoardByAbbreviation(boardAbbreviation):
     else:
         return None
 
-def getBoardByCollectionName(collectionName):
+def getBoardByCollectionName(collectionName) -> Board:
     """
     Retrieves a board by it's collection name
+    Example:
+        collectionName: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
     result = collection.find_one({"collection_name": collectionName})
@@ -41,11 +45,12 @@ def getBoardByCollectionName(collectionName):
     else:
         return None
 
-def checkIfBoardExists(board_collection_name):
+def checkIfBoardExists(boardCollectionName) -> bool:
     """
     Checks if a board exists and returns a boolean depending on the result
-    Input example: "Board_Technology"
+    Example:
+        boardCollectionName: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME]["Boards"]
-    result = collection.find_one({"collection_name": board_collection_name})
+    result = collection.find_one({"collection_name": boardCollectionName})
     return True if result else False

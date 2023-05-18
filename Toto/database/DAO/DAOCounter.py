@@ -5,10 +5,11 @@ import Toto.database.db as db
 from Toto.models.counter import Counter
 import Toto.utils.globals as g
 
-def getBoardSequence(board):
+def getBoardSequence(board) -> int:
     """
     Returns the current sequience of a board's counter and increases it by 1
-    Input example: Board_Technology
+    Example:
+        board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME]["Counters"]
     increaseBoardCounter(board)
@@ -19,7 +20,8 @@ def getBoardSequence(board):
 def increaseBoardCounter(board):
     """
     Increases a board's counter by 1
-    Input example: Board_Technology
+    Example:
+        board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME]["Counters"]
     collection.update_one({"collection": board}, {"$inc": {"sequence": 1}})

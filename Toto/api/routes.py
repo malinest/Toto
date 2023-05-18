@@ -21,18 +21,14 @@ import Toto.utils.globals as g
 ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
 ALLOWED_VIDEO_EXTENSIONS = {"mp4"}
 
-#Index
-bp_api_index = Blueprint("api_index", __name__, url_prefix="/api")
-
-@bp_api_index.route("/")
-def api_index():
-    return "<p>This is the access point of the api<p>"
-
 #Get boards
 bp_get_boards = Blueprint("get_boards", __name__, url_prefix="/api")
 
 @bp_get_boards.route("/get_boards", methods = ['GET'])
 def get_boards():
+    """
+    Returns a json with all the boards.
+    """
     return jsonify(DAOBoard.getAllBoards())
 
 #Get posts
@@ -40,6 +36,10 @@ bp_get_posts = Blueprint("get_posts", __name__, url_prefix="/api")
 
 @bp_get_posts.route("/get_posts", methods = ['GET'])
 def get_posts():
+    """
+    Returns a json with all the posts from a board.
+    Required url args: 'board' (name of the collection).
+    """
     board = request.args.get('board')
     if DAOBoard.checkIfBoardExists(board):
         return jsonify(DAOPosts.getAllPostsFromBoard(board))
@@ -51,6 +51,11 @@ bp_create_post = Blueprint("create_post", __name__, url_prefix="/api")
 
 @bp_create_post.route("/create_post", methods = ['POST'])
 def create_post():
+    """
+    Creates a post in the desired board.
+    Required url args: 'board' (name of the collection).
+    Required html form parameters: username, title, content and a file named 'media'.
+    """
     board = request.args.get('board')
     if DAOBoard.checkIfBoardExists(board):
         board = DAOBoard.getBoardByCollectionName(board)
@@ -80,6 +85,11 @@ bp_delete_post = Blueprint("delete_post", __name__, url_prefix="/api")
 
 @bp_delete_post.route("/delete_post", methods = ['GET'])
 def delete_post():
+    """
+    Deletes a post by it's id from the specified board.
+    Required url args: 'board' (name of the collection), 'post_id'.
+    WARNING: Requires admin permissions.
+    """
     board = request.args.get("board")
     board = DAOBoard.getBoardByCollectionName(board)
     post_id = request.args.get("post_id")
@@ -100,6 +110,11 @@ bp_create_comment = Blueprint("create_comment", __name__, url_prefix="/api")
 
 @bp_create_comment.route("/create_comment", methods = ['POST'])
 def create_comment():
+    """
+    Creates a comment under the the desired post.
+    Required url args: 'board' (name of the collection).
+    Required html form parameters: id (this is the id of the post we want to comment under), response_to, username, content and a file named 'media'.
+    """
     board = request.args.get("board")
     data = request.form
     media = request.files["media"]
@@ -128,6 +143,11 @@ bp_delete_comment = Blueprint("delete_comment", __name__, url_prefix="/api")
 
 @bp_delete_comment.route("/delete_comment", methods = ['GET'])
 def delete_comment():
+    """
+    Deletes a comment by it's id and the parent's post id
+    Required url args: 'board' (name of the collection), 'comment_id', 'post_id'.
+    WARNING: Requires admin permissions.
+    """
     board = request.args.get("board")
     board = DAOBoard.getBoardByCollectionName(board)
     post_id = request.args.get("post_id")
@@ -149,6 +169,11 @@ bp_create_board = Blueprint("create_board", __name__, url_prefix="/api")
 
 @bp_create_board.route("/create_board", methods = ['POST'])
 def create_board():
+    """
+    Creates a new board.
+    Required html form parameters: board_name, abbreviation.
+    WARNING: Requires admin permissions.
+    """
     if session['is_admin']:
         data = request.form
         try:
@@ -170,6 +195,10 @@ bp_create_user = Blueprint("create_user", __name__, url_prefix="/api")
 
 @bp_create_user.route("/create_user", methods = ['POST'])
 def create_user():
+    """
+    Creates a new user.
+    Required html form parameters: username, email, password.
+    """
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     if len(request.form["password"]) < 8:
         return Response("Invalid password length, the password must be at least 8 characters long", status=400)
@@ -188,6 +217,10 @@ bp_api_login = Blueprint("api_login", __name__, url_prefix="/api")
 
 @bp_api_login.route("/login", methods = ['POST'])
 def api_login():
+    """
+    Checks an user's password and creates his session.
+    Required html form parameters: username, password
+    """
     collection = db.mongo[g.DATABASE_NAME]["Users"]
     user = DAOUser.getUserByUsername(request.form["username"])
     if user:
@@ -205,6 +238,9 @@ bp_api_logout = Blueprint("api_logout", __name__, url_prefix="/api")
 
 @bp_api_logout.route("/logout", methods = ['GET'])
 def api_logout():
+    """
+    Clears an user's session.
+    """
     if "user" in session.keys():
         session.clear()
         return redirect("/")
