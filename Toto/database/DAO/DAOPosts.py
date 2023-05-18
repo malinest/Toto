@@ -1,6 +1,7 @@
 """
 DAO for the posts collections
 """
+import os
 
 import Toto.database.db as db
 from Toto.models.post import Post
@@ -28,7 +29,7 @@ def getAllPostsFromBoard(board) -> list[Post]:
 
 def getRandomPosts() -> dict[str: Post]:
     """
-    Function that returns 8 random posts from different boards to be displayed on the main page
+    Returns 8 random posts from different boards to be displayed on the main page
     """
     posts = {}
     pipeline = [
@@ -45,7 +46,7 @@ def getRandomPosts() -> dict[str: Post]:
 
 def getTrendingPosts() -> dict[str: Post]:
     """
-    Function that returns 8 posts with the most comments from all boards to be displayed on the main page
+    Returns 8 posts with the most comments from all boards to be displayed on the main page
     """
     posts = {}
     pipeline = [
@@ -73,7 +74,7 @@ def getTrendingPosts() -> dict[str: Post]:
 
 def getPostById(id, board) -> Post:
     """
-    Function that retrieves a post by it's id
+    Retrieves a post by it's id
     Example:
         id: 50
         board: "Board_Technology"
@@ -87,28 +88,30 @@ def getPostById(id, board) -> Post:
 
 def deletePostById(id, board):
     """
-    Function that deletes a post by it's id
+    Deletes a post by it's id
     Example:
         id: 50
         board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
+    deletePostFile(id, board)
     return collection.delete_one({"_id": int(id)}).acknowledged
 
 def deleteCommentById(comment_id, post_id, board):
     """
-    Function that deletes a comment form a post by their ids
+    Deletes a comment form a post by their ids
     Example:
       comment_id: 4
       post_id: 3
       board: "Board_Technology"
     """
     collection = db.mongo[g.DATABASE_NAME][board]
+    deleteCommentFile(comment_id, post_id, board)
     return collection.update_one({"_id": int(post_id)}, {"$pull": {"comments": {"_id": int(comment_id)}}})
 
 def getPostByCommentId(comment_id, board) -> Post:
     """
-    Function that retrieves a post by a comment's id
+    Retrieves a post by a comment's id
     Example:
       comment_id: 4
       board: "Board_Technology"
@@ -122,7 +125,7 @@ def getPostByCommentId(comment_id, board) -> Post:
 
 def getPostByIdOrCommentId(id, board) -> Post:
     """
-    Function that retrieves a post by an id, the id can be of the post or of one of the post's comments
+    Retrieves a post by an id, the id can be of the post or of one of the post's comments
     Example:
       id: 4
       board: "Board_Technology"
@@ -139,7 +142,7 @@ def getPostByIdOrCommentId(id, board) -> Post:
 
 def deleteLastPostIfOverLimit(board):
     """
-    Function that checks if a board has over 100 posts and deletes the older ones
+    Checks if a board has over 100 posts and deletes the older ones
     Example:
         board: "Board_Technology"
     """
@@ -148,3 +151,51 @@ def deleteLastPostIfOverLimit(board):
     if number_of_posts >= 100:
         collection.delete_one({"is_pinned": False})
         logger.debug("Deleted last post from {0}".format(board))
+
+def deletePostFile(post_id, board):
+    """
+    Deletes the file associated to a post
+    Example:
+        post_id: 8
+        board: Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    result = collection.find_one({"_id": int(post_id)})
+    if result:
+        post = Post.from_json(result)
+        extension = post.filename.split(".")[-1]
+        if extension in g.ALLOWED_IMAGE_EXTENSIONS:
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../site/templates/static/images/", post.filename))
+            os.remove(path)
+            logger.debug("Deleted image associated to post {0}".format(post_id))
+        elif extension in g.ALLOWED_VIDEO_EXTENSIONS:
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../site/templates/static/videos/", post.filename))
+            os.remove(path)
+            logger.debug("Deleted image associated to post {0}".format(post_id))
+
+def deleteCommentFile(comment_id, post_id, board):
+    """
+    Deletes the file associated to a comment
+    Example:
+        comment_id: 10
+        post_id: 8
+        board: Board_Technology
+    """
+    collection = db.mongo[g.DATABASE_NAME][board]
+    result = collection.find_one({"_id": int(post_id)})
+    if result:
+        post = Post.from_json(result)
+        comment = None
+        for c in post.comments:
+            if c["_id"] == int(comment_id):
+                comment = c
+        if comment:
+            extension = comment["filename"].split(".")[-1]
+            if extension in g.ALLOWED_IMAGE_EXTENSIONS:
+                path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../site/templates/static/images/", comment["filename"]))
+                os.remove(path)
+                logger.debug("Deleted image associated to comment {0}".format(comment_id))
+            elif extension in g.ALLOWED_VIDEO_EXTENSIONS:
+                path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../site/templates/static/videos/", comment["filename"]))
+                os.remove(path)
+                logger.debug("Deleted image associated to comment {0}".format(comment_id))

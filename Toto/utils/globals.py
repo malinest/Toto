@@ -15,3 +15,7 @@ LOG_FOLDER = config_loader.getConfig("Logging", "LOG_FOLDER")
 
 #Flask settings
 SECRET_KEY = config_loader.getConfig("Flask", "SECRET_KEY")
+
+#Media
+ALLOWED_IMAGE_EXTENSIONS = {"jpg", "jpeg", "png", "gif"}
+ALLOWED_VIDEO_EXTENSIONS = {"mp4"}
