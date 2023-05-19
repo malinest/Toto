@@ -3,6 +3,7 @@ Handles all the routes related to the api
 """
 import os
 import hashlib
+import random
 from datetime import datetime
 
 from flask import Blueprint, Response, jsonify, request, redirect, url_for, session, flash
@@ -60,16 +61,18 @@ def create_post():
         data = request.form
         media = request.files["media"]
         media_fileformat = media.filename.split(".")[-1]
+        generated_filename = None
         path = None
         if media:
+            generated_filename = "{0}.{1}".format(str(random.randint(10_000_000, 99_999_999)), media_fileformat)
             if media_fileformat in g.ALLOWED_IMAGE_EXTENSIONS:
-                path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+                path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", generated_filename))
             elif media_fileformat in g.ALLOWED_VIDEO_EXTENSIONS:
-                path = os.path.join(os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename)))
+                path = os.path.join(os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", generated_filename)))
             else:
                 return Response("Invalid file format", status=415)
             media.save(path)
-        post = Post(DAOCounter.getBoardSequence(board.collection_name), False, data["title"], data["username"], datetime.now(), media.filename, data["content"], [])
+        post = Post(DAOCounter.getBoardSequence(board.collection_name), False, data["title"], data["username"], datetime.now(), generated_filename, data["content"], [])
         collection.insert_one(post.to_dict())
         logger.info("New post created on {0} with id {1} by {2}".format(board.collection_name, post.id, post.username))
         DAOPosts.deleteLastPostIfOverLimit(board.collection_name)
@@ -117,17 +120,19 @@ def create_comment():
     media = request.files["media"]
     media_fileformat = media.filename.split(".")[-1]
     path = None
+    generated_filename = None
     if media:
+        generated_filename = "{0}.{1}".format(str(random.randint(10_000_000, 99_999_999)), media_fileformat)
         if media_fileformat in g.ALLOWED_IMAGE_EXTENSIONS:
-            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", media.filename))
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/images/", generated_filename))
         elif media_fileformat in g.ALLOWED_VIDEO_EXTENSIONS:
-            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", media.filename))
+            path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../site/templates/static/videos/", generated_filename))
         else:
             return Response("Invalid file format", status=415)
         media.save(path)
     post = DAOPosts.getPostByIdOrCommentId(data["id"], board)
     if post:
-        comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": media.filename, "date": datetime.now(), "content": data["content"]}
+        comment = {"_id": DAOCounter.getBoardSequence(board), "response_to": data["response_to"], "username": data["username"], "filename": generated_filename, "date": datetime.now(), "content": data["content"]}
         collection = db.mongo[g.DATABASE_NAME][board]
         collection.update_one({"_id": post.id}, {"$push": {"comments": comment}})
         logger.info("New comment with id {0} created on {1} by {2}".format(comment["_id"], board, comment["username"]))
