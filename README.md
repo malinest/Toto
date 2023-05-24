@@ -1,10 +1,13 @@
-![Toto logo](logo.svg)
+<div align="center">
+<img src="logo.svg">
 
 # Toto ![License Badge](https://img.shields.io/badge/license-GPL%203.0-blue)
 
 An open source tool written in python to create imageboards
 
 [Website](https://github.com/malinest/Toto) | [Download](https://github.com/malinest/Toto/releases) | [Source Code](https://github.com/malinest/Toto)
+
+</div>
 
 ---
 
