@@ -61,7 +61,7 @@ def create_post():
         data = request.form
         media = request.files["media"]
         media_fileformat = media.filename.split(".")[-1]
-        generated_filename = None
+        generated_filename = ''
         path = None
         if media:
             generated_filename = "{0}.{1}".format(str(random.randint(10_000_000, 99_999_999)), media_fileformat)
@@ -120,7 +120,7 @@ def create_comment():
     media = request.files["media"]
     media_fileformat = media.filename.split(".")[-1]
     path = None
-    generated_filename = None
+    generated_filename = ''
     if media:
         generated_filename = "{0}.{1}".format(str(random.randint(10_000_000, 99_999_999)), media_fileformat)
         if media_fileformat in g.ALLOWED_IMAGE_EXTENSIONS:
