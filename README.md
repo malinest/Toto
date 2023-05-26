@@ -13,11 +13,18 @@ An open source tool written in python to create imageboards
 
 ## Table of contents
 
+- [Requirements](#requirements)
 - [Installation](#installation)
+- [Admin account setup](#admin-account-setup)
 - [Configuration](#configuration)
 - [Screenshots](#screenshots)
 - [Contributing](#contributing)
 - [Report a bug/issue](#report-an-issue)
+
+## Requirements
+
+* Python >= 3.10
+* A MongoDB instance with an empty database
 
 ## Installation
 
@@ -35,11 +42,27 @@ Then install the requirements
 
     $ pip3 install -r requirements.txt
 
-Once the installation finished you can run Toto by typing this on your console
+Once the installation finished, open the configutation file located at Toto/config.ini and fill the following fields with your database info:
+
+	URL = YourMongoDBConnectionString
+	DATABASE_NAME = YourDatabase
+	SECRET_KEY = A random string
+
+This is the minimal configuration needed for Toto to run
+
+Once finished you can run Toto by typing this on your console
 
 	$ gunicorn -w 4 "Toto.toto:create_app()" --bind ip:port
 	
 As with all python wsgi applications it's highly recommended to place gunicorn behind a reverse proxy
+
+## Admin account setup
+
+The first thing you will need to do after running the application is to create an admin account to start adding boards to your site, to do that, access the main page from your browser and navigate to `/user/register` and create a new user.
+
+Once created, go to into your database and into the newly created `Users` collection, there you will find your user, set it's is_admin value to `true` and you're done.
+
+Now go back to the main page of the site and navigate to `/users/login` and login as your admin user, from now on you canstart adding new boards and perform any administrative tasks with this user.
 
 ## Configuration
 
@@ -58,7 +81,6 @@ Toto includes a [configuration file](https://github.com/malinest/Toto/blob/main/
 | SECRET_KEY | This is the key that is used by flask to sign the session cookies, so make it something secure and private | 9233dbf7cc629fa5c5de72a657a079f4
 
 ## Screenshots
-
 
 ## Contributing
 
